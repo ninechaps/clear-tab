@@ -1,0 +1,250 @@
+import { useState, useEffect } from 'react'
+import { useSettingsStore } from '@/store/useSettingsStore'
+import { useI18n } from '@/i18n'
+import { backgroundPresets } from './Background'
+
+interface BackgroundOption {
+  id: string
+  gradient: string
+  accent: string
+  category: 'classic' | 'warm' | 'cool' | 'dark'
+}
+
+const backgroundOptions: BackgroundOption[] = [
+  // Classic
+  { id: 'minimal', gradient: 'from-gray-950 via-slate-900 to-zinc-950', accent: 'rgba(100, 116, 139, 0.2)', category: 'classic' },
+  { id: 'city', gradient: 'from-slate-950 via-zinc-900 to-neutral-950', accent: 'rgba(148, 163, 184, 0.3)', category: 'classic' },
+  { id: 'space', gradient: 'from-indigo-950 via-violet-950 to-slate-950', accent: 'rgba(129, 140, 248, 0.3)', category: 'classic' },
+  { id: 'abstract', gradient: 'from-purple-950 via-fuchsia-900 to-pink-950', accent: 'rgba(192, 132, 252, 0.3)', category: 'classic' },
+
+  // Warm
+  { id: 'sunset', gradient: 'from-orange-950 via-rose-900 to-pink-950', accent: 'rgba(251, 146, 60, 0.3)', category: 'warm' },
+  { id: 'rose', gradient: 'from-rose-950 via-pink-900 to-fuchsia-950', accent: 'rgba(244, 63, 94, 0.3)', category: 'warm' },
+  { id: 'ember', gradient: 'from-red-950 via-orange-950 to-amber-950', accent: 'rgba(239, 68, 68, 0.3)', category: 'warm' },
+  { id: 'lavender', gradient: 'from-violet-950 via-purple-900 to-indigo-950', accent: 'rgba(139, 92, 246, 0.3)', category: 'warm' },
+
+  // Cool
+  { id: 'ocean', gradient: 'from-blue-950 via-cyan-900 to-sky-950', accent: 'rgba(34, 211, 238, 0.3)', category: 'cool' },
+  { id: 'aurora', gradient: 'from-emerald-950 via-cyan-900 to-purple-950', accent: 'rgba(52, 211, 153, 0.3)', category: 'cool' },
+  { id: 'arctic', gradient: 'from-cyan-950 via-sky-900 to-blue-950', accent: 'rgba(34, 211, 238, 0.3)', category: 'cool' },
+  { id: 'nature', gradient: 'from-emerald-950 via-green-900 to-teal-950', accent: 'rgba(16, 185, 129, 0.3)', category: 'cool' },
+  { id: 'forest', gradient: 'from-green-950 via-emerald-950 to-teal-950', accent: 'rgba(34, 197, 94, 0.3)', category: 'cool' },
+
+  // Dark
+  { id: 'midnight', gradient: 'from-slate-950 via-indigo-950 to-black', accent: 'rgba(99, 102, 241, 0.3)', category: 'dark' },
+  { id: 'noir', gradient: 'from-neutral-950 via-zinc-950 to-black', accent: 'rgba(163, 163, 163, 0.2)', category: 'dark' },
+  { id: 'cosmic', gradient: 'from-fuchsia-950 via-violet-900 to-blue-950', accent: 'rgba(217, 70, 239, 0.3)', category: 'dark' },
+]
+
+const categories = ['classic', 'warm', 'cool', 'dark'] as const
+
+interface BackgroundSelectorProps {
+  onClose: () => void
+}
+
+export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
+  const { wallpaper, setWallpaperSource } = useSettingsStore()
+  const { t } = useI18n()
+  const [activeCategory, setActiveCategory] = useState<typeof categories[number] | 'all'>('all')
+  const [hoveredId, setHoveredId] = useState<string | null>(null)
+  const isRandomMode = wallpaper.randomMode ?? true
+
+  // Lock body scroll when modal is open to prevent scrollbar shift
+  useEffect(() => {
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+    document.body.style.overflow = 'hidden'
+    document.body.style.paddingRight = `${scrollbarWidth}px`
+
+    return () => {
+      document.body.style.overflow = ''
+      document.body.style.paddingRight = ''
+    }
+  }, [])
+
+  const currentKeyword = wallpaper.keywords[0] || 'minimal'
+
+  const filteredOptions = activeCategory === 'all'
+    ? backgroundOptions
+    : backgroundOptions.filter(opt => opt.category === activeCategory)
+
+  const handleSelect = (option: BackgroundOption) => {
+    // 选择具体背景时关闭随机模式
+    setWallpaperSource({ keywords: [option.id], randomMode: false })
+    onClose()
+  }
+
+  const handleToggleRandomMode = () => {
+    setWallpaperSource({ randomMode: !isRandomMode })
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in"
+      onClick={onClose}
+    >
+      <div
+        className="bg-slate-900/95 backdrop-blur-xl rounded-2xl p-6 max-w-3xl w-full mx-4 border border-white/10 animate-scale-in shadow-2xl max-h-[85vh] overflow-hidden flex flex-col"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex justify-between items-center mb-5">
+          <h2 className="text-xl font-semibold text-white">{t.background.title}</h2>
+          <button
+            onClick={onClose}
+            className="text-white/60 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-lg cursor-pointer"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Random mode toggle */}
+        <div className="mb-5 pb-4 border-b border-white/10">
+          <button
+            onClick={handleToggleRandomMode}
+            className="w-full flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all cursor-pointer group"
+          >
+            <div className="flex items-center gap-3">
+              <div className={`p-2 rounded-lg transition-colors ${isRandomMode ? 'bg-indigo-500/20' : 'bg-white/10'}`}>
+                <svg
+                  className={`w-5 h-5 transition-colors ${isRandomMode ? 'text-indigo-400' : 'text-white/60'}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              </div>
+              <div className="text-left">
+                <div className={`font-medium transition-colors ${isRandomMode ? 'text-white' : 'text-white/80'}`}>
+                  {t.background.randomMode}
+                </div>
+                <div className="text-sm text-white/50">
+                  {t.background.randomModeHint}
+                </div>
+              </div>
+            </div>
+            <div className={`w-12 h-7 rounded-full p-1 transition-colors ${isRandomMode ? 'bg-indigo-500' : 'bg-white/20'}`}>
+              <div className={`w-5 h-5 rounded-full bg-white shadow-md transition-transform ${isRandomMode ? 'translate-x-5' : 'translate-x-0'}`} />
+            </div>
+          </button>
+        </div>
+
+        {/* Category tabs */}
+        <div className="flex gap-2 mb-5 pb-4 border-b border-white/10 overflow-x-auto">
+          <button
+            onClick={() => setActiveCategory('all')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer ${
+              activeCategory === 'all'
+                ? 'bg-white/15 text-white'
+                : 'text-white/60 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            All
+          </button>
+          {categories.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                activeCategory === cat
+                  ? 'bg-white/15 text-white'
+                  : 'text-white/60 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              {t.background.categoryLabels[cat]}
+            </button>
+          ))}
+        </div>
+
+        {/* Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 overflow-y-scroll scrollbar-thin p-1 -m-1">
+          {filteredOptions.map((option, index) => {
+            const isSelected = currentKeyword === option.id
+            const isHovered = hoveredId === option.id
+            const categoryName = t.background.categories[option.id as keyof typeof t.background.categories]
+            const preset = backgroundPresets[option.id]
+
+            return (
+              <button
+                key={option.id}
+                onClick={() => handleSelect(option)}
+                onMouseEnter={() => setHoveredId(option.id)}
+                onMouseLeave={() => setHoveredId(null)}
+                className={`group relative rounded-xl overflow-hidden transition-all duration-300 animate-fade-in cursor-pointer ${
+                  isSelected
+                    ? 'ring-2 ring-indigo-500 ring-offset-2 ring-offset-slate-900 scale-[1.02]'
+                    : 'hover:ring-2 hover:ring-white/30 hover:scale-[1.03]'
+                }`}
+                style={{ animationDelay: `${index * 30}ms` }}
+              >
+                <div className={`aspect-[4/3] bg-gradient-to-br ${option.gradient} relative overflow-hidden`}>
+                  {/* Animated orbs preview */}
+                  <div
+                    className={`absolute -top-1/4 -left-1/4 w-2/3 h-2/3 rounded-full blur-xl transition-opacity duration-500 ${
+                      isHovered ? 'opacity-60' : 'opacity-30'
+                    }`}
+                    style={{
+                      background: `radial-gradient(circle, ${preset?.orbColors?.[0] || option.accent} 0%, transparent 70%)`,
+                    }}
+                  />
+                  <div
+                    className={`absolute -bottom-1/4 -right-1/4 w-2/3 h-2/3 rounded-full blur-xl transition-opacity duration-500 ${
+                      isHovered ? 'opacity-60' : 'opacity-30'
+                    }`}
+                    style={{
+                      background: `radial-gradient(circle, ${preset?.orbColors?.[1] || option.accent} 0%, transparent 70%)`,
+                    }}
+                  />
+
+                  {/* Grid pattern */}
+                  <div
+                    className="absolute inset-0 opacity-20"
+                    style={{
+                      backgroundImage: `
+                        linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px)
+                      `,
+                      backgroundSize: '16px 16px',
+                    }}
+                  />
+
+                  {/* Label */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className={`text-white font-medium text-sm drop-shadow-lg transition-all duration-300 ${
+                      isHovered ? 'scale-110' : ''
+                    }`}>
+                      {categoryName}
+                    </span>
+                  </div>
+
+                  {/* Hover overlay */}
+                  <div className={`absolute inset-0 bg-white/5 transition-opacity duration-300 ${
+                    isHovered && !isSelected ? 'opacity-100' : 'opacity-0'
+                  }`} />
+                </div>
+
+                {/* Selected checkmark */}
+                {isSelected && (
+                  <div className="absolute top-2 right-2 bg-indigo-500 rounded-full p-1 animate-scale-in shadow-lg">
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                )}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Footer hint */}
+        <div className="mt-4 pt-4 border-t border-white/10 text-center">
+          <p className="text-white/40 text-sm">
+            {filteredOptions.length} backgrounds available
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
