@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { UserSettings, ThemeMode, Widget, WallpaperSource } from '@/types'
+import type { UserSettings, ThemeMode, Widget, WidgetType, WallpaperSource } from '@/types'
 import { storageService } from '@/services/storage'
 
 interface SettingsState extends UserSettings {
@@ -7,6 +7,9 @@ interface SettingsState extends UserSettings {
   setTheme: (theme: ThemeMode) => void
   setWidgets: (widgets: Widget[]) => void
   toggleWidget: (widgetId: string) => void
+  updateWidgetPosition: (widgetId: string, position: { x: number; y: number }) => void
+  addWidget: (type: WidgetType) => void
+  removeWidget: (widgetId: string) => void
   setWallpaperSource: (source: Partial<WallpaperSource>) => void
   loadSettings: () => Promise<void>
   saveSettings: () => Promise<void>
@@ -15,9 +18,8 @@ interface SettingsState extends UserSettings {
 const defaultSettings: UserSettings = {
   theme: 'minimal',
   widgets: [
-    { id: 'clock-1', type: 'clock', enabled: true },
-    { id: 'search-1', type: 'search', enabled: true },
     { id: 'weather-1', type: 'weather', enabled: false },
+    { id: 'quote-1', type: 'quote', enabled: false },
     { id: 'countdown-1', type: 'countdown', enabled: false },
   ],
   wallpaper: {
@@ -60,6 +62,31 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       w.id === widgetId ? { ...w, enabled: !w.enabled } : w
     )
     set({ widgets })
+    get().saveSettings()
+  },
+
+  updateWidgetPosition: (widgetId, position) => {
+    const widgets = get().widgets.map((w) =>
+      w.id === widgetId ? { ...w, position } : w
+    )
+    set({ widgets })
+    get().saveSettings()
+  },
+
+  addWidget: (type) => {
+    const newId = `${type}-${Date.now()}`
+    const newWidget: Widget = {
+      id: newId,
+      type,
+      enabled: true,
+      position: { x: 50, y: 50 },
+    }
+    set({ widgets: [...get().widgets, newWidget] })
+    get().saveSettings()
+  },
+
+  removeWidget: (widgetId) => {
+    set({ widgets: get().widgets.filter((w) => w.id !== widgetId) })
     get().saveSettings()
   },
 

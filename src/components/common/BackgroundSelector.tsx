@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSettingsStore } from '@/store/useSettingsStore'
 import { useI18n } from '@/i18n'
-import { backgroundPresets } from './Background'
+import { backgroundPresets } from './backgroundPresets'
 
 interface BackgroundOption {
   id: string
