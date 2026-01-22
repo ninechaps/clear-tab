@@ -1,6 +1,8 @@
 import { useRef, useMemo, useEffect } from 'react'
 import { useDrag } from 'react-dnd'
 import { getEmptyImage } from 'react-dnd-html5-backend'
+import { ExternalLink, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import type { Widget } from '@/types'
 
 interface WidgetContainerProps {
@@ -8,6 +10,7 @@ interface WidgetContainerProps {
   onClose: () => void
   children: React.ReactNode
   style?: React.CSSProperties
+  onOpenDetail?: () => void
 }
 
 export function WidgetContainer({
@@ -15,6 +18,7 @@ export function WidgetContainer({
   onClose,
   children,
   style,
+  onOpenDetail,
 }: WidgetContainerProps) {
   const ref = useRef<HTMLDivElement>(null)
   const position = useMemo(
@@ -70,21 +74,29 @@ export function WidgetContainer({
         {/* Widget name */}
         <span className="text-sm font-medium text-white/80 flex-1">{widgetName}</span>
 
+        {/* Open detail button */}
+        {onOpenDetail && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onOpenDetail}
+            className="p-1 h-auto text-white/40 hover:text-white/80 hover:bg-white/10"
+            title="Open in new tab"
+          >
+            <ExternalLink className="w-4 h-4" />
+          </Button>
+        )}
+
         {/* Close button */}
-        <button
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={onClose}
-          className="p-1 text-white/40 hover:text-white/80 transition-colors rounded hover:bg-white/10"
+          className="p-1 h-auto text-white/40 hover:text-white/80 hover:bg-white/10"
           title="Close widget"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
+          <X className="w-4 h-4" />
+        </Button>
       </div>
 
       {/* Content */}

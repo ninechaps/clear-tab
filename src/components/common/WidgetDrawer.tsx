@@ -1,27 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
+import { ExternalLink, X } from 'lucide-react'
 import { useSettingsStore } from '@/store/useSettingsStore'
 import { Button } from '@/components/ui/button'
 import { buttonPresets, cssClasses } from '@/theme'
-import type { WidgetType, Widget } from '@/types'
+import { getWidgetName, getWidgetDescription } from '@/widgets/_registry'
+import type { Widget } from '@/types'
 
 interface WidgetDrawerProps {
   onClose: () => void
-}
-
-const widgetNames: Record<WidgetType, string> = {
-  clock: 'Clock',
-  search: 'Search',
-  weather: 'Weather',
-  quote: 'Quote',
-  countdown: 'Countdown',
-}
-
-const widgetDescriptions: Record<WidgetType, string> = {
-  clock: 'Display current time',
-  search: 'Quick search bar',
-  weather: 'Weather information',
-  quote: 'Inspirational quotes',
-  countdown: 'End of year countdown',
 }
 
 function getNextAvailablePosition(widgets: Widget[]): { x: number; y: number } {
@@ -49,6 +35,15 @@ function getNextAvailablePosition(widgets: Widget[]): { x: number; y: number } {
 
 export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
   const { widgets, toggleWidget, updateWidgetPosition } = useSettingsStore()
+
+  const handleOpenDetail = useCallback(
+    (widgetType: string) => {
+      const baseUrl = window.location.href.split('#')[0]
+      const detailUrl = `${baseUrl}#/widget/${widgetType}`
+      window.open(detailUrl, '_blank')
+    },
+    []
+  )
 
   // Filter out clock and search widgets
   const draggableWidgets = widgets.filter((w) => w.type !== 'clock' && w.type !== 'search')
@@ -98,14 +93,7 @@ export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
             {...buttonPresets.close}
             title="Close"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            <X className="w-5 h-5" />
           </Button>
         </div>
 
@@ -125,16 +113,27 @@ export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
                   >
                     <div className="flex-1">
                       <p className="text-sm font-medium text-white/90">
-                        {widgetNames[widget.type]}
+                        {getWidgetName(widget.type)}
                       </p>
-                      <p className="text-xs text-white/50">{widgetDescriptions[widget.type]}</p>
+                      <p className="text-xs text-white/50">{getWidgetDescription(widget.type)}</p>
                     </div>
-                    <Button
-                      onClick={() => handleUnpin(widget.id)}
-                      {...buttonPresets.action}
-                    >
-                      ✓
-                    </Button>
+                    <div className="flex gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleOpenDetail(widget.type)}
+                        className="p-1.5 h-auto text-white/40 hover:text-white/80 hover:bg-white/10"
+                        title="Open in new tab"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        onClick={() => handleUnpin(widget.id)}
+                        {...buttonPresets.action}
+                      >
+                        ✓
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -155,16 +154,27 @@ export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
                   >
                     <div className="flex-1">
                       <p className="text-sm font-medium text-white/90">
-                        {widgetNames[widget.type]}
+                        {getWidgetName(widget.type)}
                       </p>
-                      <p className="text-xs text-white/50">{widgetDescriptions[widget.type]}</p>
+                      <p className="text-xs text-white/50">{getWidgetDescription(widget.type)}</p>
                     </div>
-                    <Button
-                      onClick={() => handlePin(widget.id)}
-                      {...buttonPresets.action}
-                    >
-                      Pin
-                    </Button>
+                    <div className="flex gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleOpenDetail(widget.type)}
+                        className="p-1.5 h-auto text-white/40 hover:text-white/80 hover:bg-white/10"
+                        title="Open in new tab"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        onClick={() => handlePin(widget.id)}
+                        {...buttonPresets.action}
+                      >
+                        Pin
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </div>

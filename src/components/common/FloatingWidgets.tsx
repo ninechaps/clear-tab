@@ -2,7 +2,7 @@ import { useCallback, useRef } from 'react'
 import { DndProvider, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useSettingsStore } from '@/store/useSettingsStore'
-import { Weather, Quote, Countdown } from '@/components/widgets'
+import { getWidgetComponent } from '@/widgets/_registry'
 import { WidgetContainer } from './WidgetContainer'
 import type { Widget } from '@/types'
 
@@ -53,17 +53,20 @@ function FloatingWidgetsContent() {
 
   drop(containerRef)
 
+  const handleOpenDetail = useCallback(
+    (widgetType: string) => {
+      const baseUrl = window.location.href.split('#')[0]
+      const detailUrl = `${baseUrl}#/widget/${widgetType}`
+      window.open(detailUrl, '_blank')
+    },
+    []
+  )
+
   const renderWidget = (widget: Widget) => {
-    switch (widget.type) {
-      case 'weather':
-        return <Weather />
-      case 'quote':
-        return <Quote />
-      case 'countdown':
-        return <Countdown />
-      default:
-        return null
-    }
+    // 通过 registry 动态获取组件
+    const Component = getWidgetComponent(widget.type)
+    if (!Component) return null
+    return <Component />
   }
 
   if (draggableWidgets.length === 0) {
@@ -80,6 +83,7 @@ function FloatingWidgetsContent() {
               animationDelay: `${index * 0.1}s`,
             }}
             onClose={() => toggleWidget(widget.id)}
+            onOpenDetail={() => handleOpenDetail(widget.type)}
           >
             {renderWidget(widget)}
           </WidgetContainer>

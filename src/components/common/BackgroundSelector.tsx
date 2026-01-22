@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
+import { Check, RefreshCw, X } from 'lucide-react'
 import { useSettingsStore } from '@/store/useSettingsStore'
 import { useI18n } from '@/i18n'
 import { Button } from '@/components/ui/button'
+import { Switch } from '@/components/ui/switch'
 import { backgroundPresets } from './backgroundPresets'
 
 interface BackgroundOption {
@@ -71,7 +73,6 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
   const handleSelect = (option: BackgroundOption) => {
     // 选择具体背景时关闭随机模式
     setWallpaperSource({ keywords: [option.id], randomMode: false })
-    onClose()
   }
 
   const handleToggleRandomMode = () => {
@@ -96,29 +97,18 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
             size="sm"
             className="p-2 h-auto text-white/60 hover:bg-white/10"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <X className="w-5 h-5" />
           </Button>
         </div>
 
         {/* Random mode toggle */}
         <div className="mb-5 pb-4 border-b border-white/10">
-          <Button
-            onClick={handleToggleRandomMode}
-            variant="ghost"
-            className="w-full flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all h-auto"
-          >
+          <label className="w-full flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors cursor-pointer">
             <div className="flex items-center gap-3">
               <div className={`p-2 rounded-lg transition-colors ${isRandomMode ? 'bg-indigo-500/20' : 'bg-white/10'}`}>
-                <svg
+                <RefreshCw
                   className={`w-5 h-5 transition-colors ${isRandomMode ? 'text-indigo-400' : 'text-white/60'}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
+                />
               </div>
               <div className="text-left">
                 <div className={`font-medium transition-colors ${isRandomMode ? 'text-white' : 'text-white/80'}`}>
@@ -129,21 +119,23 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
                 </div>
               </div>
             </div>
-            <div className={`w-12 h-7 rounded-full p-1 transition-colors ${isRandomMode ? 'bg-indigo-500' : 'bg-white/20'}`}>
-              <div className={`w-5 h-5 rounded-full bg-white shadow-md transition-transform ${isRandomMode ? 'translate-x-5' : 'translate-x-0'}`} />
-            </div>
-          </Button>
+            <Switch
+              checked={isRandomMode}
+              onCheckedChange={handleToggleRandomMode}
+              className="ml-3"
+            />
+          </label>
         </div>
 
         {/* Category tabs */}
-        <div className="flex gap-2 mb-5 pb-4 border-b border-white/10 overflow-x-auto">
+        <div className="flex flex-wrap gap-2 mb-5 pb-4 border-b border-white/10 shrink-0">
           <Button
             onClick={() => setActiveCategory('all')}
             variant={activeCategory === 'all' ? 'default' : 'ghost'}
             className={`text-sm whitespace-nowrap ${
               activeCategory === 'all'
                 ? 'bg-white/15 text-white'
-                : 'text-white/60 hover:text-white'
+                : 'text-white/60 hover:text-white hover:bg-white/10'
             }`}
           >
             All
@@ -156,7 +148,7 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
               className={`text-sm whitespace-nowrap ${
                 activeCategory === cat
                   ? 'bg-white/15 text-white'
-                  : 'text-white/60 hover:text-white'
+                  : 'text-white/60 hover:text-white hover:bg-white/10'
               }`}
             >
               {t.background.categoryLabels[cat]}
@@ -165,7 +157,7 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 overflow-y-scroll scrollbar-thin p-1 -m-1">
+        <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 overflow-y-scroll scrollbar-thin p-1 -m-1 min-h-0">
           {filteredOptions.map((option, index) => {
             const isSelected = currentKeyword === option.id
             const isHovered = hoveredId === option.id
@@ -173,13 +165,12 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
             const preset = backgroundPresets[option.id]
 
             return (
-              <Button
+              <div
                 key={option.id}
                 onClick={() => handleSelect(option)}
                 onMouseEnter={() => setHoveredId(option.id)}
                 onMouseLeave={() => setHoveredId(null)}
-                variant="ghost"
-                className={`group relative rounded-xl overflow-hidden transition-all duration-300 animate-fade-in h-auto p-0 ${
+                className={`group relative rounded-xl overflow-hidden transition-all duration-300 animate-fade-in cursor-pointer ${
                   isSelected
                     ? 'ring-2 ring-indigo-500 ring-offset-2 ring-offset-slate-900 scale-[1.02]'
                     : 'hover:ring-2 hover:ring-white/30 hover:scale-[1.03]'
@@ -235,12 +226,10 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
                 {/* Selected checkmark */}
                 {isSelected && (
                   <div className="absolute top-2 right-2 bg-indigo-500 rounded-full p-1 animate-scale-in shadow-lg">
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <Check className="w-3 h-3 text-white" />
                   </div>
                 )}
-              </Button>
+              </div>
             )
           })}
         </div>
