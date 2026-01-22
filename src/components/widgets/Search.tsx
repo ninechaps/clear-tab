@@ -1,6 +1,8 @@
 import { useState, FormEvent, useRef, useEffect } from 'react'
 import { useSettingsStore } from '@/store/useSettingsStore'
 import { useI18n } from '@/i18n'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 
 const SEARCH_ENGINES = {
   google: 'https://www.google.com/search?q=',
@@ -78,7 +80,7 @@ export function Search() {
             {ENGINE_ICONS[searchSettings.engine] || ENGINE_ICONS.google}
           </div>
 
-          <input
+          <Input
             ref={inputRef}
             type="text"
             value={query}
@@ -86,13 +88,15 @@ export function Search() {
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             placeholder={t.search.placeholder}
-            className="w-full pl-12 pr-14 py-4 text-lg bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl text-white placeholder-white/30 outline-none transition-all duration-300 focus:bg-black/30 focus:border-white/20"
+            className="w-full pl-12 pr-14 py-6 text-lg bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl text-white placeholder-white/30 outline-none transition-all duration-300 focus:bg-black/30 focus:border-white/20"
           />
 
           {/* Submit button */}
-          <button
+          <Button
             type="submit"
-            className={`absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-xl transition-all duration-200 cursor-pointer ${
+            variant="ghost"
+            size="sm"
+            className={`absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-xl h-auto transition-all duration-200 ${
               query.trim()
                 ? 'text-white bg-white/10 hover:bg-white/20'
                 : 'text-white/40 hover:text-white/60'
@@ -101,7 +105,7 @@ export function Search() {
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-          </button>
+          </Button>
         </div>
       </div>
 

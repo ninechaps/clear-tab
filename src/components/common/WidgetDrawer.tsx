@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useSettingsStore } from '@/store/useSettingsStore'
+import { Button } from '@/components/ui/button'
 import type { WidgetType, Widget } from '@/types'
 
 interface WidgetDrawerProps {
@@ -91,9 +92,11 @@ export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
         {/* Header */}
         <div className="border-b border-white/10 px-6 py-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-white">Widgets</h2>
-          <button
+          <Button
             onClick={onClose}
-            className="p-1 text-white/50 hover:text-white/80 transition-colors rounded hover:bg-white/10"
+            variant="ghost"
+            size="sm"
+            className="p-1 h-auto text-white/60 hover:text-white"
             title="Close"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -104,7 +107,7 @@ export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
-          </button>
+          </Button>
         </div>
 
         {/* Scrollable content */}
@@ -127,12 +130,14 @@ export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
                       </p>
                       <p className="text-xs text-white/50">{widgetDescriptions[widget.type]}</p>
                     </div>
-                    <button
+                    <Button
                       onClick={() => handleUnpin(widget.id)}
-                      className="px-3 py-1 text-xs font-medium text-white/60 hover:text-white bg-white/10 hover:bg-white/20 rounded transition-all duration-200 cursor-pointer"
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs text-white/60 hover:text-white"
                     >
                       ✓
-                    </button>
+                    </Button>
                   </div>
                 ))}
               </div>
@@ -157,12 +162,14 @@ export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
                       </p>
                       <p className="text-xs text-white/50">{widgetDescriptions[widget.type]}</p>
                     </div>
-                    <button
+                    <Button
                       onClick={() => handlePin(widget.id)}
-                      className="px-3 py-1 text-xs font-medium text-white/60 hover:text-white bg-white/10 hover:bg-white/20 rounded transition-all duration-200 cursor-pointer"
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs text-white/60 hover:text-white"
                     >
                       Pin
-                    </button>
+                    </Button>
                   </div>
                 ))}
               </div>

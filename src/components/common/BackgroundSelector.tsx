@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSettingsStore } from '@/store/useSettingsStore'
 import { useI18n } from '@/i18n'
+import { Button } from '@/components/ui/button'
 import { backgroundPresets } from './backgroundPresets'
 
 interface BackgroundOption {
@@ -89,21 +90,24 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
         {/* Header */}
         <div className="flex justify-between items-center mb-5">
           <h2 className="text-xl font-semibold text-white">{t.background.title}</h2>
-          <button
+          <Button
             onClick={onClose}
-            className="text-white/60 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-lg cursor-pointer"
+            variant="ghost"
+            size="sm"
+            className="p-2 h-auto text-white/60 hover:text-white"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
-          </button>
+          </Button>
         </div>
 
         {/* Random mode toggle */}
         <div className="mb-5 pb-4 border-b border-white/10">
-          <button
+          <Button
             onClick={handleToggleRandomMode}
-            className="w-full flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all cursor-pointer group"
+            variant="ghost"
+            className="w-full flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all h-auto"
           >
             <div className="flex items-center gap-3">
               <div className={`p-2 rounded-lg transition-colors ${isRandomMode ? 'bg-indigo-500/20' : 'bg-white/10'}`}>
@@ -128,33 +132,35 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
             <div className={`w-12 h-7 rounded-full p-1 transition-colors ${isRandomMode ? 'bg-indigo-500' : 'bg-white/20'}`}>
               <div className={`w-5 h-5 rounded-full bg-white shadow-md transition-transform ${isRandomMode ? 'translate-x-5' : 'translate-x-0'}`} />
             </div>
-          </button>
+          </Button>
         </div>
 
         {/* Category tabs */}
         <div className="flex gap-2 mb-5 pb-4 border-b border-white/10 overflow-x-auto">
-          <button
+          <Button
             onClick={() => setActiveCategory('all')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer ${
+            variant={activeCategory === 'all' ? 'default' : 'ghost'}
+            className={`text-sm whitespace-nowrap ${
               activeCategory === 'all'
                 ? 'bg-white/15 text-white'
-                : 'text-white/60 hover:text-white hover:bg-white/5'
+                : 'text-white/60 hover:text-white'
             }`}
           >
             All
-          </button>
+          </Button>
           {categories.map(cat => (
-            <button
+            <Button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer ${
+              variant={activeCategory === cat ? 'default' : 'ghost'}
+              className={`text-sm whitespace-nowrap ${
                 activeCategory === cat
                   ? 'bg-white/15 text-white'
-                  : 'text-white/60 hover:text-white hover:bg-white/5'
+                  : 'text-white/60 hover:text-white'
               }`}
             >
               {t.background.categoryLabels[cat]}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -167,12 +173,13 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
             const preset = backgroundPresets[option.id]
 
             return (
-              <button
+              <Button
                 key={option.id}
                 onClick={() => handleSelect(option)}
                 onMouseEnter={() => setHoveredId(option.id)}
                 onMouseLeave={() => setHoveredId(null)}
-                className={`group relative rounded-xl overflow-hidden transition-all duration-300 animate-fade-in cursor-pointer ${
+                variant="ghost"
+                className={`group relative rounded-xl overflow-hidden transition-all duration-300 animate-fade-in h-auto p-0 ${
                   isSelected
                     ? 'ring-2 ring-indigo-500 ring-offset-2 ring-offset-slate-900 scale-[1.02]'
                     : 'hover:ring-2 hover:ring-white/30 hover:scale-[1.03]'
@@ -233,7 +240,7 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
                     </svg>
                   </div>
                 )}
-              </button>
+              </Button>
             )
           })}
         </div>

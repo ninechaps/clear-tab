@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Button } from '@/components/ui/button'
 
 interface Quote {
   text: string
@@ -41,10 +42,12 @@ export function Quote() {
 
   return (
     <div className="relative">
-      <button
+      <Button
         onClick={handleRefresh}
         disabled={isRefreshing}
-        className="absolute -top-10 right-0 p-1 text-white/40 hover:text-white/60 transition-all duration-300 disabled:opacity-50 cursor-pointer"
+        variant="ghost"
+        size="sm"
+        className="absolute -top-10 right-0 p-1 text-white/40 hover:text-white/60 transition-all duration-300 disabled:opacity-50 h-auto"
         title="Refresh quote"
       >
         <svg
@@ -60,7 +63,7 @@ export function Quote() {
             d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
           />
         </svg>
-      </button>
+      </Button>
 
       <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 max-w-md">
         <div className="mb-6">
