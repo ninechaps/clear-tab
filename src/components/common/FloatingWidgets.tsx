@@ -29,11 +29,18 @@ function FloatingWidgetsContent() {
     () => ({
       accept: 'widget',
       hover(item: DragItem, monitor) {
-        const delta = monitor.getDifferenceFromInitialOffset()
-        if (!delta) return
+        // 使用 getClientOffset 获取实时鼠标坐标，而不是 getDifferenceFromInitialOffset
+        const clientOffset = monitor.getClientOffset()
+        const initialOffset = monitor.getInitialClientOffset()
 
-        const left = item.left + (delta.x / window.innerWidth) * 100
-        const top = item.top + (delta.y / window.innerHeight) * 100
+        if (!clientOffset || !initialOffset) return
+
+        // 计算相对于窗口的百分比位置
+        const deltaX = (clientOffset.x - initialOffset.x) / window.innerWidth * 100
+        const deltaY = (clientOffset.y - initialOffset.y) / window.innerHeight * 100
+
+        const left = item.left + deltaX
+        const top = item.top + deltaY
 
         const finalLeft = Math.max(5, Math.min(95, left))
         const finalTop = Math.max(5, Math.min(95, top))

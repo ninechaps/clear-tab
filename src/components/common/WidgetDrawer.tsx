@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useSettingsStore } from '@/store/useSettingsStore'
 import { Button } from '@/components/ui/button'
+import { buttonPresets, cssClasses } from '@/theme'
 import type { WidgetType, Widget } from '@/types'
 
 interface WidgetDrawerProps {
@@ -83,20 +84,18 @@ export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
     <>
       {/* Overlay */}
       <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 animate-fade-in"
+        className={`${cssClasses.modal.backdrop} animate-fade-in`}
         onClick={onClose}
       />
 
       {/* Drawer */}
-      <div className="fixed right-0 top-0 h-screen w-96 bg-slate-900/95 backdrop-blur-2xl border-l border-white/10 z-50 flex flex-col overflow-hidden animate-slide-in-right">
+      <div className={cssClasses.modal.drawer}>
         {/* Header */}
-        <div className="border-b border-white/10 px-6 py-4 flex items-center justify-between">
+        <div className={`${cssClasses.divider.primary} px-6 py-4 flex items-center justify-between`}>
           <h2 className="text-lg font-semibold text-white">Widgets</h2>
           <Button
             onClick={onClose}
-            variant="ghost"
-            size="sm"
-            className="p-1 h-auto text-white/60 hover:text-white"
+            {...buttonPresets.close}
             title="Close"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,7 +113,7 @@ export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
         <div className="flex-1 overflow-y-auto">
           {/* Pinned section */}
           {pinnedWidgets.length > 0 && (
-            <div className="px-6 py-4 border-b border-white/5">
+            <div className={`px-6 py-4 ${cssClasses.divider.secondary}`}>
               <h3 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">
                 📌 Pinned
               </h3>
@@ -132,9 +131,7 @@ export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
                     </div>
                     <Button
                       onClick={() => handleUnpin(widget.id)}
-                      variant="ghost"
-                      size="sm"
-                      className="text-xs text-white/60 hover:text-white"
+                      {...buttonPresets.action}
                     >
                       ✓
                     </Button>
@@ -164,9 +161,7 @@ export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
                     </div>
                     <Button
                       onClick={() => handlePin(widget.id)}
-                      variant="ghost"
-                      size="sm"
-                      className="text-xs text-white/60 hover:text-white"
+                      {...buttonPresets.action}
                     >
                       Pin
                     </Button>

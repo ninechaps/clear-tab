@@ -31,3 +31,7 @@ pnpm-debug.log*
 # AI
 .claude
 CLAUDE.md
+
+# Other
+THEME_SYSTEM.md
+THEME_ARCHITECTURE.md
