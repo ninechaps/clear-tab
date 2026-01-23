@@ -1,10 +1,11 @@
-import { useRef, useMemo, useEffect } from 'react';
+import { useRef, useMemo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDrag } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { ExternalLink, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getWidgetManifest } from '@/widgets/_registry';
+import { WidgetHeaderContext, type HeaderAction } from './WidgetHeaderContext';
 import type { Widget, WidgetType } from '@/types';
 
 interface WidgetContainerProps {
@@ -24,6 +25,7 @@ export function WidgetContainer({
 }: WidgetContainerProps) {
   const ref = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
+  const [headerActions, setHeaderActions] = useState<HeaderAction[]>([]);
   const position = useMemo(
     () => widget.position || { x: 50, y: 50 },
     [widget.position]
@@ -62,6 +64,19 @@ export function WidgetContainer({
 
   const widgetName = getWidgetName();
 
+  const headerContextValue = useMemo(() => ({
+    registerAction: (action: HeaderAction) => {
+      setHeaderActions((prev) => {
+        const exists = prev.some((a) => a.id === action.id);
+        if (exists) return prev;
+        return [...prev, action];
+      });
+    },
+    unregisterAction: (id: string) => {
+      setHeaderActions((prev) => prev.filter((a) => a.id !== id));
+    },
+  }), []);
+
   return (
     <div
       ref={ref}
@@ -81,6 +96,13 @@ export function WidgetContainer({
       >
         {/* Widget name */}
         <span className="text-sm font-medium text-white/80 flex-1">{widgetName}</span>
+
+        {/* Custom header actions from widget */}
+        <div className="flex gap-1">
+          {headerActions.map((action) => (
+            <div key={action.id}>{action.element}</div>
+          ))}
+        </div>
 
         {/* Open detail button */}
         {onOpenDetail && (
@@ -108,7 +130,9 @@ export function WidgetContainer({
       </div>
 
       {/* Content */}
-      <div className="p-6">{children}</div>
+      <WidgetHeaderContext.Provider value={headerContextValue}>
+        <div className="p-6">{children}</div>
+      </WidgetHeaderContext.Provider>
     </div>
   );
 }

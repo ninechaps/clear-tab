@@ -6,6 +6,9 @@
   "permissions": [
     "storage"
   ],
+  "host_permissions": [
+    "https://zenquotes.io/*"
+  ],
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
