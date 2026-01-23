@@ -2,6 +2,7 @@ export const locales = {
   en: {
     search: {
       placeholder: 'Search the web...',
+      pressEnterToSearch: 'Press Enter to search',
     },
     clock: {
       greeting: {
@@ -48,10 +49,46 @@ export const locales = {
     settings: {
       changeBackground: 'Change background',
     },
+    language: {
+      switchLanguage: 'Language',
+      english: 'English',
+      chinese: '中文',
+    },
+    common: {
+      back: '← Back',
+      widgets: 'Widgets',
+      settings: 'Settings',
+    },
+    widgets: {
+      title: 'Widgets',
+      close: 'Close',
+      pinned: 'Pinned',
+      available: 'Available',
+      pin: 'Pin',
+      unpin: '✓',
+      openInNewTab: 'Open in new tab',
+      noWidgets: 'No widgets available',
+      weather: {
+        name: 'Weather',
+        description: 'Weather information',
+      },
+      quote: {
+        name: 'Quote',
+        description: 'Inspirational quotes',
+      },
+      countdown: {
+        name: 'Countdown',
+        description: 'End of year countdown',
+      },
+    },
+    backgroundSelector: {
+      all: 'All',
+    },
   },
   zh: {
     search: {
       placeholder: '搜索...',
+      pressEnterToSearch: '按 Enter 键进行搜索',
     },
     clock: {
       greeting: {
@@ -97,6 +134,41 @@ export const locales = {
     },
     settings: {
       changeBackground: '切换背景',
+    },
+    language: {
+      switchLanguage: '语言',
+      english: 'English',
+      chinese: '中文',
+    },
+    common: {
+      back: '← 返回',
+      widgets: '小部件',
+      settings: '设置',
+    },
+    widgets: {
+      title: '小部件',
+      close: '关闭',
+      pinned: '已固定',
+      available: '可用',
+      pin: '固定',
+      unpin: '✓',
+      openInNewTab: '在新标签页中打开',
+      noWidgets: '没有可用的小部件',
+      weather: {
+        name: '天气',
+        description: '天气信息',
+      },
+      quote: {
+        name: '语录',
+        description: '鼓舞人心的语录',
+      },
+      countdown: {
+        name: '倒计时',
+        description: '年末倒计时',
+      },
+    },
+    backgroundSelector: {
+      all: '全部',
     },
   },
 } as const

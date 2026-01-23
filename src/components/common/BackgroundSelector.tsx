@@ -138,7 +138,7 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
                 : 'text-white/60 hover:text-white hover:bg-white/10'
             }`}
           >
-            All
+            {t.backgroundSelector.all}
           </Button>
           {categories.map(cat => (
             <Button

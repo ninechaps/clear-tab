@@ -11,8 +11,14 @@ interface SettingsState extends UserSettings {
   addWidget: (type: WidgetType) => void
   removeWidget: (widgetId: string) => void
   setWallpaperSource: (source: Partial<WallpaperSource>) => void
+  setLanguage: (language: 'en' | 'zh') => void
   loadSettings: () => Promise<void>
   saveSettings: () => Promise<void>
+}
+
+function getBrowserLocale(): 'en' | 'zh' {
+  const browserLang = navigator.language.split('-')[0]
+  return browserLang === 'zh' ? 'zh' : 'en'
 }
 
 const defaultSettings: UserSettings = {
@@ -41,6 +47,7 @@ const defaultSettings: UserSettings = {
     unit: 'celsius',
   },
   countdowns: [],
+  language: getBrowserLocale(),
 }
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({
@@ -95,6 +102,11 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     get().saveSettings()
   },
 
+  setLanguage: (language) => {
+    set({ language })
+    get().saveSettings()
+  },
+
   loadSettings: async () => {
     set({ isLoading: true })
     const settings = await storageService.getSettings()
@@ -115,6 +127,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       searchSettings: state.searchSettings,
       weatherSettings: state.weatherSettings,
       countdowns: state.countdowns,
+      language: state.language,
     }
     await storageService.saveSettings(settings)
   },

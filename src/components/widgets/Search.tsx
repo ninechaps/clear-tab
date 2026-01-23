@@ -119,7 +119,7 @@ export function Search() {
       {/* Keyboard hint */}
       <div className={`text-center mt-3 transition-all duration-300 ${isFocused ? 'opacity-60' : 'opacity-0'}`}>
         <span className="text-white/50 text-xs">
-          Press <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white/70 font-mono text-[10px]">Enter</kbd> to search
+          {t.search.pressEnterToSearch}
         </span>
       </div>
     </form>

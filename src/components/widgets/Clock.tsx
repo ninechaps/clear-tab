@@ -1,9 +1,11 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useSettingsStore } from '@/store/useSettingsStore'
+import { useI18n } from '@/i18n/useI18n'
 
 export function Clock() {
   const [time, setTime] = useState(new Date())
   const { clockSettings } = useSettingsStore()
+  const { locale } = useI18n()
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -30,16 +32,17 @@ export function Clock() {
   }, [time, clockSettings.format, clockSettings.showSeconds])
 
   const formattedDate = useMemo(() => {
-    return time.toLocaleDateString(undefined, {
+    const localeString = locale === 'zh' ? 'zh-CN' : 'en-US'
+    return time.toLocaleDateString(localeString, {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     })
-  }, [time])
+  }, [time, locale])
 
   return (
-    <div className="text-center text-white select-none">
+    <div className="text-center text-white">
       {/* Time display */}
       <div className="text-7xl sm:text-8xl md:text-9xl font-extralight tracking-tight mb-3 drop-shadow-lg transition-all duration-300 hover:drop-shadow-2xl group cursor-default">
         <span className="inline-block transition-transform duration-300 group-hover:scale-[1.02]">

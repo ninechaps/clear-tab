@@ -339,7 +339,7 @@ body {
 
   /* 模态框 - 背景覆盖层 */
   .modal-backdrop {
-    @apply fixed inset-0 bg-black/60 backdrop-blur-sm z-40;
+    @apply fixed inset-0 bg-black/60 backdrop-blur-sm z-40 cursor-pointer;
   }
 
   /* 模态框 - 抽屉 */

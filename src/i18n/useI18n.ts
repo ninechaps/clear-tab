@@ -1,14 +1,10 @@
-import { useMemo } from 'react'
+import { useSettingsStore } from '@/store/useSettingsStore'
 import { locales, type Locale } from './locales'
 
-function getBrowserLocale(): Locale {
-  const browserLang = navigator.language.split('-')[0]
-  return browserLang === 'zh' ? 'zh' : 'en'
-}
-
 export function useI18n() {
-  const locale = useMemo(() => getBrowserLocale(), [])
-  const t = useMemo(() => locales[locale], [locale])
+  const language = useSettingsStore((state) => state.language)
+  const locale: Locale = language as Locale
+  const t = locales[locale]
 
   return { locale, t }
 }

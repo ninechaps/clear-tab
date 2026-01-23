@@ -57,6 +57,7 @@ export interface UserSettings {
   searchSettings: SearchSettings
   weatherSettings: WeatherSettings
   countdowns: CountdownSettings[]
+  language: 'en' | 'zh'
 }
 
 export interface CachedWallpaper {
