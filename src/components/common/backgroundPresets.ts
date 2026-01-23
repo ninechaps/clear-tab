@@ -260,13 +260,13 @@ export const backgroundPresets: Record<string, BackgroundPreset> = {
     gridColor: 'rgba(180, 100, 200, 0.05)',
     glowIntensity: 1.05,
   },
-}
+};
 
 // 获取所有可用的背景 ID
-export const backgroundIds = Object.keys(backgroundPresets)
+export const backgroundIds = Object.keys(backgroundPresets);
 
 // 随机选择一个背景 ID
 export function getRandomBackgroundId(): string {
-  const randomIndex = Math.floor(Math.random() * backgroundIds.length)
-  return backgroundIds[randomIndex]
+  const randomIndex = Math.floor(Math.random() * backgroundIds.length);
+  return backgroundIds[randomIndex];
 }

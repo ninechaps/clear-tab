@@ -1,4 +1,4 @@
-import { Clock, Search, QuickLinks } from '@/components/widgets'
+import { Clock, Search, QuickLinks } from '@/components/widgets';
 
 export function ProductiveLayout() {
   return (
@@ -21,5 +21,5 @@ export function ProductiveLayout() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-import { create } from 'zustand'
-import type { UserSettings, ThemeMode, Widget, WidgetType, WallpaperSource } from '@/types'
-import { storageService } from '@/services/storage'
+import { create } from 'zustand';
+import type { UserSettings, ThemeMode, Widget, WidgetType, WallpaperSource } from '@/types';
+import { storageService } from '@/services/storage';
 
 interface SettingsState extends UserSettings {
   isLoading: boolean
@@ -17,8 +17,8 @@ interface SettingsState extends UserSettings {
 }
 
 function getBrowserLocale(): 'en' | 'zh' {
-  const browserLang = navigator.language.split('-')[0]
-  return browserLang === 'zh' ? 'zh' : 'en'
+  const browserLang = navigator.language.split('-')[0];
+  return browserLang === 'zh' ? 'zh' : 'en';
 }
 
 const defaultSettings: UserSettings = {
@@ -48,77 +48,77 @@ const defaultSettings: UserSettings = {
   },
   countdowns: [],
   language: getBrowserLocale(),
-}
+};
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({
   ...defaultSettings,
   isLoading: true,
 
   setTheme: (theme) => {
-    set({ theme })
-    get().saveSettings()
+    set({ theme });
+    get().saveSettings();
   },
 
   setWidgets: (widgets) => {
-    set({ widgets })
-    get().saveSettings()
+    set({ widgets });
+    get().saveSettings();
   },
 
   toggleWidget: (widgetId) => {
     const widgets = get().widgets.map((w) =>
       w.id === widgetId ? { ...w, enabled: !w.enabled } : w
-    )
-    set({ widgets })
-    get().saveSettings()
+    );
+    set({ widgets });
+    get().saveSettings();
   },
 
   updateWidgetPosition: (widgetId, position) => {
     const widgets = get().widgets.map((w) =>
       w.id === widgetId ? { ...w, position } : w
-    )
-    set({ widgets })
-    get().saveSettings()
+    );
+    set({ widgets });
+    get().saveSettings();
   },
 
   addWidget: (type) => {
-    const newId = `${type}-${Date.now()}`
+    const newId = `${type}-${Date.now()}`;
     const newWidget: Widget = {
       id: newId,
       type,
       enabled: true,
       position: { x: 50, y: 50 },
-    }
-    set({ widgets: [...get().widgets, newWidget] })
-    get().saveSettings()
+    };
+    set({ widgets: [...get().widgets, newWidget] });
+    get().saveSettings();
   },
 
   removeWidget: (widgetId) => {
-    set({ widgets: get().widgets.filter((w) => w.id !== widgetId) })
-    get().saveSettings()
+    set({ widgets: get().widgets.filter((w) => w.id !== widgetId) });
+    get().saveSettings();
   },
 
   setWallpaperSource: (source) => {
-    set({ wallpaper: { ...get().wallpaper, ...source } })
-    get().saveSettings()
+    set({ wallpaper: { ...get().wallpaper, ...source } });
+    get().saveSettings();
   },
 
   setLanguage: (language) => {
-    set({ language })
-    get().saveSettings()
+    set({ language });
+    get().saveSettings();
   },
 
   loadSettings: async () => {
-    set({ isLoading: true })
-    const settings = await storageService.getSettings()
+    set({ isLoading: true });
+    const settings = await storageService.getSettings();
     if (settings) {
-      set({ ...settings, isLoading: false })
+      set({ ...settings, isLoading: false });
     } else {
-      set({ isLoading: false })
+      set({ isLoading: false });
     }
   },
 
   saveSettings: async () => {
-    const state = get()
+    const state = get();
     const settings: UserSettings = {
       theme: state.theme,
       widgets: state.widgets,
@@ -128,7 +128,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       weatherSettings: state.weatherSettings,
       countdowns: state.countdowns,
       language: state.language,
-    }
-    await storageService.saveSettings(settings)
+    };
+    await storageService.saveSettings(settings);
   },
-}))
+}));

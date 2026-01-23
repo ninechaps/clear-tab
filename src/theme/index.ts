@@ -35,7 +35,7 @@ export const buttonPresets = {
     variant: 'ghost' as const,
     className: 'btn-floating btn-disabled',
   },
-}
+};
 
 // ============================================
 // CSS 类名常量 - 直接在 JSX 中使用
@@ -74,7 +74,7 @@ export const cssClasses = {
   input: {
     base: 'input-base input-focus',
   },
-}
+};
 
 // ============================================
 // 标签按钮动态样式生成器
@@ -83,8 +83,8 @@ export const cssClasses = {
 export const getTabButtonClass = (isActive: boolean): string => {
   return isActive
     ? 'text-sm whitespace-nowrap px-4 py-2 rounded-lg bg-white/15 text-white transition-all duration-200'
-    : 'text-sm whitespace-nowrap px-4 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-all duration-200'
-}
+    : 'text-sm whitespace-nowrap px-4 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-all duration-200';
+};
 
 // ============================================
 // 搜索按钮动态样式生成器
@@ -93,8 +93,8 @@ export const getTabButtonClass = (isActive: boolean): string => {
 export const getSearchButtonClass = (isActive: boolean): string => {
   return isActive
     ? 'absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-xl text-white bg-white/10 hover:bg-white/20 transition-all duration-200 h-auto cursor-pointer'
-    : 'absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-xl text-white/40 hover:text-white/60 transition-all duration-200 h-auto cursor-pointer'
-}
+    : 'absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-xl text-white/40 hover:text-white/60 transition-all duration-200 h-auto cursor-pointer';
+};
 
 // ============================================
 // 卡片按钮样式生成器（用于背景选择）
@@ -103,8 +103,8 @@ export const getSearchButtonClass = (isActive: boolean): string => {
 export const getCardButtonClass = (isSelected: boolean): string => {
   return isSelected
     ? 'group relative rounded-xl overflow-hidden transition-all duration-300 animate-fade-in h-auto p-0 ring-2 ring-indigo-500 ring-offset-2 ring-offset-slate-900 scale-[1.02]'
-    : 'group relative rounded-xl overflow-hidden transition-all duration-300 animate-fade-in h-auto p-0 hover:ring-2 hover:ring-white/30 hover:scale-[1.03]'
-}
+    : 'group relative rounded-xl overflow-hidden transition-all duration-300 animate-fade-in h-auto p-0 hover:ring-2 hover:ring-white/30 hover:scale-[1.03]';
+};
 
 // ============================================
 // 工具函数
@@ -116,8 +116,8 @@ export const getCardButtonClass = (isSelected: boolean): string => {
  * @returns 合并后的类名字符串
  */
 export const cn = (...classes: (string | undefined | null | false)[]): string => {
-  return classes.filter(Boolean).join(' ')
-}
+  return classes.filter(Boolean).join(' ');
+};
 
 /**
  * 获取文本颜色类
@@ -130,9 +130,9 @@ export const getTextColorClass = (level: 'primary' | 'secondary' | 'muted' | 'di
     secondary: 'text-white/60',
     muted: 'text-white/50',
     disabled: 'text-white/40',
-  }
-  return colorMap[level]
-}
+  };
+  return colorMap[level];
+};
 
 /**
  * 获取背景颜色类
@@ -147,6 +147,6 @@ export const getBgColorClass = (type: 'primary' | 'secondary' | 'overlay' | 'car
     card: 'bg-app-bg-card',
     hover: 'bg-app-bg-hover',
     active: 'bg-app-bg-active',
-  }
-  return bgMap[type]
-}
+  };
+  return bgMap[type];
+};

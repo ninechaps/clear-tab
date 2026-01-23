@@ -35,3 +35,6 @@ CLAUDE.md
 # Other
 THEME_SYSTEM.md
 THEME_ARCHITECTURE.md
+
+# Husky internal files (deprecated)
+.husky/_

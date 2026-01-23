@@ -1,19 +1,19 @@
-import { Sun } from 'lucide-react'
-import { useSettingsStore } from '@/store/useSettingsStore'
-import { useI18n } from '@/i18n'
+import { useTranslation } from 'react-i18next';
+import { Sun } from 'lucide-react';
+import { useSettingsStore } from '@/store/useSettingsStore';
 
 export function Weather() {
-  const { weatherSettings } = useSettingsStore()
-  const { t } = useI18n()
+  const { weatherSettings } = useSettingsStore();
+  const { t } = useTranslation();
 
   // Placeholder - would integrate with a weather API
   const mockWeather = {
     temp: weatherSettings.unit === 'celsius' ? 22 : 72,
-    condition: t.weather.sunny,
-    location: weatherSettings.location || t.weather.location,
-  }
+    condition: t('weather.sunny'),
+    location: weatherSettings.location || t('weather.location'),
+  };
 
-  const unit = weatherSettings.unit === 'celsius' ? '°C' : '°F'
+  const unit = weatherSettings.unit === 'celsius' ? '°C' : '°F';
 
   return (
     <div className="flex items-center gap-4 text-white bg-white/10 backdrop-blur-md rounded-2xl px-6 py-4">
@@ -29,5 +29,5 @@ export function Weather() {
         </div>
       </div>
     </div>
-  )
+  );
 }

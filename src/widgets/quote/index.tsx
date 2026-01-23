@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
-import { RefreshCw } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { useEffect, useState } from 'react';
+import { RefreshCw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface Quote {
   text: string
@@ -23,23 +23,23 @@ const quotes: Quote[] = [
   { text: '不要为了讨好所有人而活，你无法做到。', author: 'Steve Jobs' },
   { text: '你的时间有限，不要浪费它来复制别人的人生。', author: 'Steve Jobs' },
   { text: '坚持你的梦想，不要放弃。', author: '未知' },
-]
+];
 
 export function Quote() {
-  const [currentQuote, setCurrentQuote] = useState<Quote>(quotes[0])
-  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [currentQuote, setCurrentQuote] = useState<Quote>(quotes[0]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * quotes.length)
-    setCurrentQuote(quotes[randomIndex])
-  }, [])
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    setCurrentQuote(quotes[randomIndex]);
+  }, []);
 
   const handleRefresh = () => {
-    setIsRefreshing(true)
-    const randomIndex = Math.floor(Math.random() * quotes.length)
-    setCurrentQuote(quotes[randomIndex])
-    setTimeout(() => setIsRefreshing(false), 600)
-  }
+    setIsRefreshing(true);
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    setCurrentQuote(quotes[randomIndex]);
+    setTimeout(() => setIsRefreshing(false), 600);
+  };
 
   return (
     <div className="relative">
@@ -65,5 +65,5 @@ export function Quote() {
         <p className="text-sm text-white/60 text-right">— {currentQuote.author}</p>
       </div>
     </div>
-  )
+  );
 }

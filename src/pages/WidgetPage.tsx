@@ -1,21 +1,21 @@
-import { Link } from 'react-router-dom'
-import { getWidgetComponent, getWidgetManifest } from '@/widgets/_registry'
-import { Background } from '@/components/common'
-import { useI18n } from '@/i18n/useI18n'
-import { Button } from '@/components/ui/button'
-import { NotFoundPage } from './NotFoundPage'
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { getWidgetComponent, getWidgetManifest } from '@/widgets/_registry';
+import { Background } from '@/components/common';
+import { Button } from '@/components/ui/button';
+import { NotFoundPage } from './NotFoundPage';
 
 interface WidgetPageProps {
   widgetId: string
 }
 
 export function WidgetPage({ widgetId }: WidgetPageProps) {
-  const Component = getWidgetComponent(widgetId)
-  const manifest = getWidgetManifest(widgetId)
-  const { t } = useI18n()
+  const Component = getWidgetComponent(widgetId);
+  const manifest = getWidgetManifest(widgetId);
+  const { t } = useTranslation();
 
   if (!Component || !manifest) {
-    return <NotFoundPage />
+    return <NotFoundPage />;
   }
 
   return (
@@ -31,7 +31,7 @@ export function WidgetPage({ widgetId }: WidgetPageProps) {
                 variant="ghost"
                 className="p-3 bg-white/8 hover:bg-white/15 backdrop-blur-xl border border-white/10 hover:border-white/20 rounded-lg text-white/70 hover:text-white transition-all duration-300"
               >
-                {t.common.back}
+                {t('common.back')}
               </Button>
             </Link>
             <h1 className="text-2xl font-semibold text-white">
@@ -46,5 +46,5 @@ export function WidgetPage({ widgetId }: WidgetPageProps) {
         <Component />
       </main>
     </div>
-  )
+  );
 }

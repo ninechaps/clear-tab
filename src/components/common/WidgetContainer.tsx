@@ -1,9 +1,11 @@
-import { useRef, useMemo, useEffect } from 'react'
-import { useDrag } from 'react-dnd'
-import { getEmptyImage } from 'react-dnd-html5-backend'
-import { ExternalLink, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import type { Widget } from '@/types'
+import { useRef, useMemo, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDrag } from 'react-dnd';
+import { getEmptyImage } from 'react-dnd-html5-backend';
+import { ExternalLink, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { getWidgetManifest } from '@/widgets/_registry';
+import type { Widget, WidgetType } from '@/types';
 
 interface WidgetContainerProps {
   widget: Widget
@@ -20,11 +22,12 @@ export function WidgetContainer({
   style,
   onOpenDetail,
 }: WidgetContainerProps) {
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
   const position = useMemo(
     () => widget.position || { x: 50, y: 50 },
     [widget.position]
-  )
+  );
 
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
@@ -35,17 +38,29 @@ export function WidgetContainer({
       }),
     }),
     [widget.id, position.x, position.y]
-  )
+  );
 
   // 禁用默认的拖拽预览
   useEffect(() => {
-    preview(getEmptyImage(), { captureDraggingState: true })
-  }, [preview])
+    preview(getEmptyImage(), { captureDraggingState: true });
+  }, [preview]);
 
-  drag(ref)
+  drag(ref);
 
-  const widgetName =
-    widget.type.charAt(0).toUpperCase() + widget.type.slice(1)
+  const getWidgetName = () => {
+    try {
+      const name = t(`widgets.${widget.type}.name`);
+      if (name && !name.startsWith('widgets.')) {
+        return name;
+      }
+    } catch {
+      // Fallback to manifest
+    }
+    const manifest = getWidgetManifest(widget.type as WidgetType);
+    return manifest?.name || (widget.type.charAt(0).toUpperCase() + widget.type.slice(1));
+  };
+
+  const widgetName = getWidgetName();
 
   return (
     <div
@@ -64,13 +79,6 @@ export function WidgetContainer({
       <div
         className="border-b border-white/10 px-4 py-3 flex items-center justify-between gap-3 cursor-grab active:cursor-grabbing hover:bg-white/5 transition-colors"
       >
-        {/* Drag handle */}
-        <div className="flex items-center gap-1">
-          <div className="w-1 h-1 rounded-full bg-white/40" />
-          <div className="w-1 h-1 rounded-full bg-white/40" />
-          <div className="w-1 h-1 rounded-full bg-white/40" />
-        </div>
-
         {/* Widget name */}
         <span className="text-sm font-medium text-white/80 flex-1">{widgetName}</span>
 
@@ -102,5 +110,5 @@ export function WidgetContainer({
       {/* Content */}
       <div className="p-6">{children}</div>
     </div>
-  )
+  );
 }

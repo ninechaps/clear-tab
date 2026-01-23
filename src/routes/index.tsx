@@ -1,8 +1,8 @@
-import { Routes, Route } from 'react-router-dom'
-import { widgetRegistry } from '@/widgets/_registry'
-import { HomePage } from '@/pages/HomePage'
-import { WidgetPage } from '@/pages/WidgetPage'
-import { NotFoundPage } from '@/pages/NotFoundPage'
+import { Routes, Route } from 'react-router-dom';
+import { widgetRegistry } from '@/widgets/_registry';
+import { HomePage } from '@/pages/HomePage';
+import { WidgetPage } from '@/pages/WidgetPage';
+import { NotFoundPage } from '@/pages/NotFoundPage';
 
 export function AppRoutes() {
   return (
@@ -22,5 +22,5 @@ export function AppRoutes() {
       {/* 404 页面 */}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
-  )
+  );
 }

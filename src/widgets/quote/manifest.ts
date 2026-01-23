@@ -18,4 +18,4 @@ export const quoteManifest = {
     closeable: true,      // 可关闭
     resizable: false,     // 不可调整大小
   },
-}
+};

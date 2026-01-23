@@ -1,45 +1,45 @@
-import { useState, useEffect, useMemo } from 'react'
-import { useSettingsStore } from '@/store/useSettingsStore'
-import { useI18n } from '@/i18n/useI18n'
+import { useState, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSettingsStore } from '@/store/useSettingsStore';
 
 export function Clock() {
-  const [time, setTime] = useState(new Date())
-  const { clockSettings } = useSettingsStore()
-  const { locale } = useI18n()
+  const [time, setTime] = useState(new Date());
+  const { clockSettings } = useSettingsStore();
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTime(new Date())
-    }, 1000)
+      setTime(new Date());
+    }, 1000);
 
-    return () => clearInterval(timer)
-  }, [])
+    return () => clearInterval(timer);
+  }, []);
 
   const formattedTime = useMemo(() => {
     const hours = clockSettings.format === '12h'
       ? time.getHours() % 12 || 12
-      : time.getHours()
-    const minutes = time.getMinutes().toString().padStart(2, '0')
-    const seconds = time.getSeconds().toString().padStart(2, '0')
+      : time.getHours();
+    const minutes = time.getMinutes().toString().padStart(2, '0');
+    const seconds = time.getSeconds().toString().padStart(2, '0');
     const period = clockSettings.format === '12h'
       ? (time.getHours() >= 12 ? ' PM' : ' AM')
-      : ''
+      : '';
 
     if (clockSettings.showSeconds) {
-      return { main: `${hours}:${minutes}`, seconds, period }
+      return { main: `${hours}:${minutes}`, seconds, period };
     }
-    return { main: `${hours}:${minutes}`, seconds: null, period }
-  }, [time, clockSettings.format, clockSettings.showSeconds])
+    return { main: `${hours}:${minutes}`, seconds: null, period };
+  }, [time, clockSettings.format, clockSettings.showSeconds]);
 
   const formattedDate = useMemo(() => {
-    const localeString = locale === 'zh' ? 'zh-CN' : 'en-US'
+    const localeString = i18n.language === 'zh' ? 'zh-CN' : 'en-US';
     return time.toLocaleDateString(localeString, {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric',
-    })
-  }, [time, locale])
+    });
+  }, [time, i18n.language]);
 
   return (
     <div className="text-center text-white">
@@ -65,5 +65,5 @@ export function Clock() {
         {formattedDate}
       </div>
     </div>
-  )
+  );
 }

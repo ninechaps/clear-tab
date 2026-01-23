@@ -1,36 +1,36 @@
-import { useSettingsStore } from '@/store/useSettingsStore'
-import { useState, useEffect, useRef } from 'react'
-import { backgroundPresets, getRandomBackgroundId } from './backgroundPresets'
+import { useSettingsStore } from '@/store/useSettingsStore';
+import { useState, useEffect, useRef } from 'react';
+import { backgroundPresets, getRandomBackgroundId } from './backgroundPresets';
 
 export function Background() {
-  const { wallpaper } = useSettingsStore()
+  const { wallpaper } = useSettingsStore();
 
   // 使用 useState 的初始化函数确保随机值只在首次渲染时生成
-  const [randomId] = useState(() => getRandomBackgroundId())
+  const [randomId] = useState(() => getRandomBackgroundId());
 
   // 如果是随机模式，使用随机生成的 ID；否则使用用户选择的
   const currentKeyword = wallpaper.randomMode
     ? randomId
-    : (wallpaper.keywords[0] || 'cyber')
+    : (wallpaper.keywords[0] || 'cyber');
 
-  const preset = backgroundPresets[currentKeyword] || backgroundPresets.cyber
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const prevKeywordRef = useRef(currentKeyword)
+  const preset = backgroundPresets[currentKeyword] || backgroundPresets.cyber;
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const prevKeywordRef = useRef(currentKeyword);
 
   // Track theme changes for smooth transitions
   useEffect(() => {
     if (prevKeywordRef.current !== currentKeyword) {
-      setIsTransitioning(true)
-      const timer = setTimeout(() => setIsTransitioning(false), 1000)
-      prevKeywordRef.current = currentKeyword
-      return () => clearTimeout(timer)
+      setIsTransitioning(true);
+      const timer = setTimeout(() => setIsTransitioning(false), 1000);
+      prevKeywordRef.current = currentKeyword;
+      return () => clearTimeout(timer);
     }
-  }, [currentKeyword])
+  }, [currentKeyword]);
 
-  const orbColor1 = preset.orbColors?.[0] || preset.accent
-  const orbColor2 = preset.orbColors?.[1] || preset.accentSecondary || preset.accent
-  const gridColor = preset.gridColor || 'rgba(255, 255, 255, 0.05)'
-  const glowIntensity = preset.glowIntensity || 1
+  const orbColor1 = preset.orbColors?.[0] || preset.accent;
+  const orbColor2 = preset.orbColors?.[1] || preset.accentSecondary || preset.accent;
+  const gridColor = preset.gridColor || 'rgba(255, 255, 255, 0.05)';
+  const glowIntensity = preset.glowIntensity || 1;
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden bg-black">
@@ -140,9 +140,9 @@ export function Background() {
       <div
         className="absolute inset-0 opacity-[0.015] pointer-events-none"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")',
         }}
       />
     </div>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
-import { Check, RefreshCw, X } from 'lucide-react'
-import { useSettingsStore } from '@/store/useSettingsStore'
-import { useI18n } from '@/i18n'
-import { Button } from '@/components/ui/button'
-import { Switch } from '@/components/ui/switch'
-import { backgroundPresets } from './backgroundPresets'
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Check, RefreshCw, X } from 'lucide-react';
+import { useSettingsStore } from '@/store/useSettingsStore';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { backgroundPresets } from './backgroundPresets';
 
 interface BackgroundOption {
   id: string
@@ -37,47 +37,47 @@ const backgroundOptions: BackgroundOption[] = [
   { id: 'midnight', gradient: 'from-slate-950 via-indigo-950 to-black', accent: 'rgba(99, 102, 241, 0.3)', category: 'dark' },
   { id: 'noir', gradient: 'from-neutral-950 via-zinc-950 to-black', accent: 'rgba(163, 163, 163, 0.2)', category: 'dark' },
   { id: 'cosmic', gradient: 'from-fuchsia-950 via-violet-900 to-blue-950', accent: 'rgba(217, 70, 239, 0.3)', category: 'dark' },
-]
+];
 
-const categories = ['classic', 'warm', 'cool', 'dark'] as const
+const categories = ['classic', 'warm', 'cool', 'dark'] as const;
 
 interface BackgroundSelectorProps {
   onClose: () => void
 }
 
 export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
-  const { wallpaper, setWallpaperSource } = useSettingsStore()
-  const { t } = useI18n()
-  const [activeCategory, setActiveCategory] = useState<typeof categories[number] | 'all'>('all')
-  const [hoveredId, setHoveredId] = useState<string | null>(null)
-  const isRandomMode = wallpaper.randomMode ?? true
+  const { wallpaper, setWallpaperSource } = useSettingsStore();
+  const { t } = useTranslation();
+  const [activeCategory, setActiveCategory] = useState<typeof categories[number] | 'all'>('all');
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const isRandomMode = wallpaper.randomMode ?? true;
 
   // Lock body scroll when modal is open to prevent scrollbar shift
   useEffect(() => {
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
-    document.body.style.overflow = 'hidden'
-    document.body.style.paddingRight = `${scrollbarWidth}px`
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = `${scrollbarWidth}px`;
 
     return () => {
-      document.body.style.overflow = ''
-      document.body.style.paddingRight = ''
-    }
-  }, [])
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    };
+  }, []);
 
-  const currentKeyword = wallpaper.keywords[0] || 'minimal'
+  const currentKeyword = wallpaper.keywords[0] || 'minimal';
 
   const filteredOptions = activeCategory === 'all'
     ? backgroundOptions
-    : backgroundOptions.filter(opt => opt.category === activeCategory)
+    : backgroundOptions.filter(opt => opt.category === activeCategory);
 
   const handleSelect = (option: BackgroundOption) => {
     // 选择具体背景时关闭随机模式
-    setWallpaperSource({ keywords: [option.id], randomMode: false })
-  }
+    setWallpaperSource({ keywords: [option.id], randomMode: false });
+  };
 
   const handleToggleRandomMode = () => {
-    setWallpaperSource({ randomMode: !isRandomMode })
-  }
+    setWallpaperSource({ randomMode: !isRandomMode });
+  };
 
   return (
     <div
@@ -90,7 +90,7 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
       >
         {/* Header */}
         <div className="flex justify-between items-center mb-5">
-          <h2 className="text-xl font-semibold text-white">{t.background.title}</h2>
+          <h2 className="text-xl font-semibold text-white">{t('background.title')}</h2>
           <Button
             onClick={onClose}
             variant="ghost"
@@ -112,10 +112,10 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
               </div>
               <div className="text-left">
                 <div className={`font-medium transition-colors ${isRandomMode ? 'text-white' : 'text-white/80'}`}>
-                  {t.background.randomMode}
+                  {t('background.randomMode')}
                 </div>
                 <div className="text-sm text-white/50">
-                  {t.background.randomModeHint}
+                  {t('background.randomModeHint')}
                 </div>
               </div>
             </div>
@@ -138,7 +138,7 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
                 : 'text-white/60 hover:text-white hover:bg-white/10'
             }`}
           >
-            {t.backgroundSelector.all}
+            {t('backgroundSelector.all')}
           </Button>
           {categories.map(cat => (
             <Button
@@ -151,7 +151,7 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
                   : 'text-white/60 hover:text-white hover:bg-white/10'
               }`}
             >
-              {t.background.categoryLabels[cat]}
+              {t(`background.categoryLabels.${cat}`)}
             </Button>
           ))}
         </div>
@@ -159,10 +159,10 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
         {/* Grid */}
         <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 overflow-y-scroll scrollbar-thin p-1 -m-1 min-h-0">
           {filteredOptions.map((option, index) => {
-            const isSelected = currentKeyword === option.id
-            const isHovered = hoveredId === option.id
-            const categoryName = t.background.categories[option.id as keyof typeof t.background.categories]
-            const preset = backgroundPresets[option.id]
+            const isSelected = currentKeyword === option.id;
+            const isHovered = hoveredId === option.id;
+            const categoryName = t(`background.categories.${option.id}`);
+            const preset = backgroundPresets[option.id];
 
             return (
               <div
@@ -230,7 +230,7 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
                   </div>
                 )}
               </div>
-            )
+            );
           })}
         </div>
 
@@ -242,5 +242,5 @@ export function BackgroundSelector({ onClose }: BackgroundSelectorProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

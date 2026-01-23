@@ -1,49 +1,49 @@
-import { useState, useEffect, useCallback } from 'react'
-import { wallpaperService } from '@/services/wallpaper'
-import { useSettingsStore } from '@/store/useSettingsStore'
-import type { CachedWallpaper } from '@/types'
+import { useState, useEffect, useCallback } from 'react';
+import { wallpaperService } from '@/services/wallpaper';
+import { useSettingsStore } from '@/store/useSettingsStore';
+import type { CachedWallpaper } from '@/types';
 
 export function useWallpaper() {
-  const [wallpaper, setWallpaper] = useState<CachedWallpaper | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<Error | null>(null)
+  const [wallpaper, setWallpaper] = useState<CachedWallpaper | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-  const { wallpaper: wallpaperSource } = useSettingsStore()
+  const { wallpaper: wallpaperSource } = useSettingsStore();
 
   const loadWallpaper = useCallback(async () => {
-    setIsLoading(true)
-    setError(null)
+    setIsLoading(true);
+    setError(null);
     try {
-      const wp = await wallpaperService.getWallpaper(wallpaperSource)
-      setWallpaper(wp)
+      const wp = await wallpaperService.getWallpaper(wallpaperSource);
+      setWallpaper(wp);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to load wallpaper'))
+      setError(err instanceof Error ? err : new Error('Failed to load wallpaper'));
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [wallpaperSource])
+  }, [wallpaperSource]);
 
   const refreshWallpaper = useCallback(async () => {
-    setIsLoading(true)
-    setError(null)
+    setIsLoading(true);
+    setError(null);
     try {
-      const wp = await wallpaperService.refreshWallpaper(wallpaperSource)
-      setWallpaper(wp)
+      const wp = await wallpaperService.refreshWallpaper(wallpaperSource);
+      setWallpaper(wp);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to refresh wallpaper'))
+      setError(err instanceof Error ? err : new Error('Failed to refresh wallpaper'));
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [wallpaperSource])
+  }, [wallpaperSource]);
 
   useEffect(() => {
-    loadWallpaper()
-  }, [loadWallpaper])
+    loadWallpaper();
+  }, [loadWallpaper]);
 
   return {
     wallpaper,
     isLoading,
     error,
     refreshWallpaper,
-  }
+  };
 }

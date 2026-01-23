@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom'
-import { Background } from '@/components/common'
-import { Button } from '@/components/ui/button'
+import { Link } from 'react-router-dom';
+import { Background } from '@/components/common';
+import { Button } from '@/components/ui/button';
 
 export function NotFoundPage() {
   return (
@@ -16,5 +16,5 @@ export function NotFoundPage() {
         </Link>
       </div>
     </div>
-  )
+  );
 }
