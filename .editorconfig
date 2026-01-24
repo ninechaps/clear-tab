@@ -1,0 +1,30 @@
+# EditorConfig 帮助开发者在不同编辑器和 IDE 之间定义和维护一致的编码风格
+# 参考: https://editorconfig.org
+
+root = true
+
+# 所有文件
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# TypeScript, JavaScript, JSON, YAML 文件
+[*.{ts,tsx,js,jsx,json,yaml,yml}]
+indent_style = space
+indent_size = 2
+
+# CSS, SCSS, Less 文件
+[*.{css,scss,less}]
+indent_style = space
+indent_size = 2
+
+# HTML, Vue 文件
+[*.{html,vue}]
+indent_style = space
+indent_size = 2
+
+# Markdown 文件
+[*.md]
+trim_trailing_whitespace = false
