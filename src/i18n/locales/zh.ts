@@ -79,6 +79,10 @@ export const zh = {
       name: '倒计时',
       description: '年末倒计时',
     },
+    game2048: {
+      name: '2048 游戏',
+      description: '经典2048益智游戏',
+    },
   },
   backgroundSelector: {
     all: '全部',

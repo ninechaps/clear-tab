@@ -27,6 +27,7 @@ const defaultSettings: UserSettings = {
     { id: 'weather-1', type: 'weather', enabled: false },
     { id: 'quote-1', type: 'quote', enabled: false },
     { id: 'countdown-1', type: 'countdown', enabled: false },
+    { id: 'game2048-1', type: 'game2048', enabled: false },
   ],
   wallpaper: {
     provider: 'local',

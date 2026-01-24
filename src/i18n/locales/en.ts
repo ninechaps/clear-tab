@@ -79,6 +79,10 @@ export const en = {
       name: 'Countdown',
       description: 'End of year countdown',
     },
+    game2048: {
+      name: '2048 Game',
+      description: 'Classic 2048 puzzle game',
+    },
   },
   backgroundSelector: {
     all: 'All',

@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useMemo, useState } from 'react';
 import { getWidgetComponent, getWidgetManifest } from '@/widgets/_registry';
 import { Background } from '@/components/common';
 import { Button } from '@/components/ui/button';
+import { WidgetHeaderContext } from '@/components/common/WidgetHeaderContext';
+import type { HeaderAction } from '@/components/common/WidgetHeaderContext';
 import { NotFoundPage } from './NotFoundPage';
 
 interface WidgetPageProps {
@@ -13,6 +16,21 @@ export function WidgetPage({ widgetId }: WidgetPageProps) {
   const Component = getWidgetComponent(widgetId);
   const manifest = getWidgetManifest(widgetId);
   const { t } = useTranslation();
+  const [headerActions, setHeaderActions] = useState<HeaderAction[]>([]);
+
+  // 创建 Context 值供小部件使用
+  const headerContextValue = useMemo(() => ({
+    registerAction: (action: HeaderAction) => {
+      setHeaderActions((prev) => {
+        const exists = prev.some((a) => a.id === action.id);
+        if (exists) return prev;
+        return [...prev, action];
+      });
+    },
+    unregisterAction: (id: string) => {
+      setHeaderActions((prev) => prev.filter((a) => a.id !== id));
+    },
+  }), []);
 
   if (!Component || !manifest) {
     return <NotFoundPage />;
@@ -38,12 +56,20 @@ export function WidgetPage({ widgetId }: WidgetPageProps) {
               {manifest.icon} {manifest.name}
             </h1>
           </div>
+          {/* 显示小部件注册的操作按钮 */}
+          <div className="flex gap-2">
+            {headerActions.map((action) => (
+              <div key={action.id}>{action.element}</div>
+            ))}
+          </div>
         </div>
       </header>
 
       {/* 小部件内容区 */}
       <main className="flex-1 flex items-center justify-center p-8 pt-24 pb-12">
-        <Component />
+        <WidgetHeaderContext.Provider value={headerContextValue}>
+          <Component />
+        </WidgetHeaderContext.Provider>
       </main>
     </div>
   );

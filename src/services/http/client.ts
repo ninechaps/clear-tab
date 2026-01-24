@@ -10,15 +10,9 @@ class HttpClient {
             timeout: 10000,
         });
 
-        // Request interceptor to rewrite URLs in development
+        // Request interceptor to handle URLs across environments
         this.instance.interceptors.request.use((config) => {
-            const isExtension = typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id;
-
-            // In non-extension environment (development), rewrite zenquotes.io URLs to use proxy
-            if (!isExtension && config.url?.includes('zenquotes.io')) {
-                config.url = config.url.replace('https://zenquotes.io', '');
-            }
-
+            config.url = this.normalizeUrl(config.url || '');
             return config;
         });
 
@@ -63,6 +57,27 @@ class HttpClient {
         } catch (error) {
             throw this.handleError(error);
         }
+    }
+
+    /**
+     * Normalize URL based on execution environment
+     * - In Chrome extension: convert relative /api/* paths to absolute URLs
+     * - In development: keep relative paths for Vite proxy to intercept
+     */
+    private normalizeUrl(url: string): string {
+        const isExtension = typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id;
+
+        if (isExtension && url.startsWith('/api/')) {
+            // Chrome extension environment: add domain prefix for CORS and host_permissions
+            return `https://zenquotes.io${url}`;
+        }
+
+        if (!isExtension && url.includes('zenquotes.io')) {
+            // Development environment: strip domain for Vite proxy
+            return url.replace('https://zenquotes.io', '');
+        }
+
+        return url;
     }
 
     private handleError(error: unknown): Error {

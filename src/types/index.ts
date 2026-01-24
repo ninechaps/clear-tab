@@ -11,7 +11,7 @@ export interface Theme {
   backgroundOverlay?: number
 }
 
-export type WidgetType = 'clock' | 'search' | 'weather' | 'countdown' | 'quote'
+export type WidgetType = 'clock' | 'search' | 'weather' | 'countdown' | 'quote' | 'game2048'
 
 export interface Widget {
   id: string
