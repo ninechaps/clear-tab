@@ -49,6 +49,15 @@ export interface WallpaperSource {
   randomMode?: boolean // 每次打开随机背景
 }
 
+export interface QuickLinkItem {
+  id: string
+  name: string
+  url: string
+  iconType?: 'builtin' | 'favicon' // builtin 使用内置图标，favicon 使用网站图标
+  faviconUrl?: string // favicon URL（仅当 iconType 为 favicon 时使用）
+  hoverColor?: string
+}
+
 export interface UserSettings {
   theme: ThemeMode
   widgets: Widget[]
@@ -58,6 +67,7 @@ export interface UserSettings {
   weatherSettings: WeatherSettings
   countdowns: CountdownSettings[]
   language: 'en' | 'zh'
+  quickLinks?: QuickLinkItem[]
 }
 
 export interface CachedWallpaper {
