@@ -30,6 +30,7 @@ export function WidgetPage({ widgetId }: WidgetPageProps) {
     unregisterAction: (id: string) => {
       setHeaderActions((prev) => prev.filter((a) => a.id !== id));
     },
+    isFullPage: true,
   }), []);
 
   if (!Component || !manifest) {
@@ -67,9 +68,11 @@ export function WidgetPage({ widgetId }: WidgetPageProps) {
 
       {/* 小部件内容区 */}
       <main className="flex-1 flex items-center justify-center p-8 pt-24 pb-12">
-        <WidgetHeaderContext.Provider value={headerContextValue}>
-          <Component />
-        </WidgetHeaderContext.Provider>
+        <div className="w-full max-w-2xl">
+          <WidgetHeaderContext.Provider value={headerContextValue}>
+            <Component />
+          </WidgetHeaderContext.Provider>
+        </div>
       </main>
     </div>
   );

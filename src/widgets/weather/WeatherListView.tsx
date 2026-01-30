@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ArrowLeft, Cloud, CloudRain, Droplets, Eye, RefreshCw, Sun, Wind } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useWidgetHeader } from '@/components/common/useWidgetHeader';
+import { WidgetHeaderContext } from '@/components/common/WidgetHeaderContext';
 import { useCitiesWeather } from '@/hooks/useCitiesWeather';
 import type { WeatherData } from '@/services/weather';
 
@@ -55,6 +56,9 @@ interface WeatherListProps {
 }
 
 function WeatherListPanel({ citiesWeather, onSelectCity, showExitAnimation }: WeatherListProps) {
+  const headerContext = useContext(WidgetHeaderContext);
+  const isFullPage = headerContext?.isFullPage ?? false;
+
   return (
     <div
       className="w-full overflow-hidden"
@@ -63,7 +67,7 @@ function WeatherListPanel({ citiesWeather, onSelectCity, showExitAnimation }: We
       }}
     >
       {/* List */}
-      <div className="max-h-96 overflow-y-auto">
+      <div className={`max-h-96 overflow-y-auto ${isFullPage ? 'bg-white/8 backdrop-blur-xl rounded-2xl border border-white/20 p-4' : ''}`}>
         {citiesWeather.length === 0 ? (
           <div className="px-4 py-6 text-center text-white/50 text-sm">
                         No cities data available
@@ -73,7 +77,11 @@ function WeatherListPanel({ citiesWeather, onSelectCity, showExitAnimation }: We
             <button
               key={index}
               onClick={() => onSelectCity(weather)}
-              className="w-full grid grid-cols-3 gap-4 px-4 py-3 hover:bg-white/10 transition-colors text-white text-sm border-b border-white/10"
+              className={`w-full grid grid-cols-3 gap-4 px-4 py-3 transition-colors text-white text-sm ${
+                isFullPage
+                  ? 'hover:bg-white/15 border-b border-white/10 last:border-b-0 rounded-lg'
+                  : 'hover:bg-white/10 border-b border-white/10'
+              }`}
             >
               {/* City Name */}
               <div className="text-left font-medium">{weather.city}</div>

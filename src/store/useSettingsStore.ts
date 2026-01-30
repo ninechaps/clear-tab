@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { UserSettings, ThemeMode, Widget, WidgetType, WallpaperSource, QuickLinkItem } from '@/types';
 import { storageService } from '@/services/storage';
+import { widgetRegistry } from '@/widgets/_registry';
 
 interface SettingsState extends UserSettings {
   isLoading: boolean
@@ -92,14 +93,21 @@ export const DEFAULT_LINKS_MAP = new Map(
 // 最大快捷链接数量
 export const MAX_QUICK_LINKS = 12;
 
+/**
+ * 从小部件注册表自动生成默认小部件列表
+ * 这样新增小部件时，只需在 manifest 中配置，无需修改这里
+ */
+function generateDefaultWidgets(): Widget[] {
+  return Object.entries(widgetRegistry).map(([widgetId, manifest]) => ({
+    id: `${widgetId}-1`,
+    type: manifest.id as WidgetType,
+    enabled: manifest.enabled,
+  }));
+}
+
 const defaultSettings: UserSettings = {
   theme: 'minimal',
-  widgets: [
-    { id: 'weather-1', type: 'weather', enabled: false },
-    { id: 'quote-1', type: 'quote', enabled: false },
-    { id: 'countdown-1', type: 'countdown', enabled: false },
-    { id: 'game2048-1', type: 'game2048', enabled: false },
-  ],
+  widgets: generateDefaultWidgets(),
   wallpaper: {
     provider: 'local',
     keywords: ['minimal'],
@@ -216,7 +224,27 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     if (settings) {
       // 确保 quickLinks 存在，如果不存在则使用默认值
       const quickLinks = settings.quickLinks || DEFAULT_QUICK_LINKS;
-      set({ ...settings, quickLinks, isLoading: false });
+
+      // 数据迁移：合并新增的小部件
+      const currentWidgets = settings.widgets || [];
+      const currentWidgetTypes = new Set(currentWidgets.map((w) => w.type));
+
+      // 从 registry 获取所有应该存在的小部件
+      const allWidgetTypes = Object.keys(widgetRegistry) as WidgetType[];
+
+      // 添加任何不在当前列表中的新小部件
+      const newWidgets = allWidgetTypes
+        .filter((type) => !currentWidgetTypes.has(type))
+        .map((type) => ({
+          id: `${type}-1`,
+          type,
+          enabled: widgetRegistry[type].enabled,
+        }));
+
+      // 合并已存储的和新增的小部件
+      const mergedWidgets = [...currentWidgets, ...newWidgets];
+
+      set({ ...settings, widgets: mergedWidgets, quickLinks, isLoading: false });
     } else {
       set({ isLoading: false });
     }

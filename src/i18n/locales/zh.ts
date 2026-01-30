@@ -57,6 +57,7 @@ export const zh = {
     back: '← 返回',
     widgets: '小部件',
     settings: '设置',
+    error: '错误',
   },
   widgets: {
     title: '小部件',
@@ -82,6 +83,30 @@ export const zh = {
     game2048: {
       name: '2048 游戏',
       description: '经典2048益智游戏',
+    },
+    news: {
+      name: '新闻头条',
+      description: '最新新闻头条',
+      loading: '加载新闻中...',
+      noData: '没有可用的新闻',
+    },
+    exchange: {
+      name: '汇率行情',
+      description: '货币汇率信息',
+      loading: '加载汇率中...',
+      noData: '没有可用的汇率',
+    },
+    stock: {
+      name: '股市指数',
+      description: '股票市场指数',
+      loading: '加载股市指数中...',
+      noData: '没有可用的股市指数',
+    },
+    'air-quality': {
+      name: '空气质量',
+      description: '空气质量指数',
+      loading: '加载空气质量中...',
+      noData: '没有可用的空气质量数据',
     },
   },
   backgroundSelector: {

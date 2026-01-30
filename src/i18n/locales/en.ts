@@ -57,6 +57,7 @@ export const en = {
     back: '← Back',
     widgets: 'Widgets',
     settings: 'Settings',
+    error: 'Error',
   },
   widgets: {
     title: 'Widgets',
@@ -82,6 +83,30 @@ export const en = {
     game2048: {
       name: '2048 Game',
       description: 'Classic 2048 puzzle game',
+    },
+    news: {
+      name: 'News Headlines',
+      description: 'Latest news headlines',
+      loading: 'Loading news...',
+      noData: 'No news available',
+    },
+    exchange: {
+      name: 'Exchange Rates',
+      description: 'Currency exchange rates',
+      loading: 'Loading exchange rates...',
+      noData: 'No exchange rates available',
+    },
+    stock: {
+      name: 'Stock Indices',
+      description: 'Stock market indices',
+      loading: 'Loading stock indices...',
+      noData: 'No stock indices available',
+    },
+    'air-quality': {
+      name: 'Air Quality',
+      description: 'Air quality index',
+      loading: 'Loading air quality...',
+      noData: 'No air quality data available',
     },
   },
   backgroundSelector: {

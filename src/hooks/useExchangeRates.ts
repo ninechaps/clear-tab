@@ -1,0 +1,40 @@
+import { useState, useEffect, useCallback } from 'react';
+import { exchangeService } from '@/services/exchange';
+import type { ExchangeRate } from '@/services/exchange';
+
+interface UseExchangeRatesReturn {
+  rates: ExchangeRate[];
+  isLoading: boolean;
+  error: string | null;
+  refresh: () => Promise<void>;
+}
+
+export function useExchangeRates(): UseExchangeRatesReturn {
+  const [rates, setRates] = useState<ExchangeRate[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchRates = useCallback(async (showLoading: boolean = true) => {
+    try {
+      showLoading && setIsLoading(true);
+      const data = await exchangeService.fetchExchangeRates();
+      setRates(data);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch exchange rates');
+      setRates([]);
+    } finally {
+      showLoading && setIsLoading(false);
+    }
+  }, []);
+
+  const refresh = useCallback(async () => {
+    await fetchRates(false);
+  }, [fetchRates]);
+
+  useEffect(() => {
+    fetchRates();
+  }, [fetchRates]);
+
+  return { rates, isLoading, error, refresh };
+}

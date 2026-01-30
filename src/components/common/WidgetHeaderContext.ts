@@ -8,6 +8,7 @@ export interface HeaderAction {
 export interface WidgetHeaderContextType {
   registerAction: (action: HeaderAction) => void;
   unregisterAction: (id: string) => void;
+  isFullPage?: boolean;
 }
 
 export const WidgetHeaderContext = createContext<WidgetHeaderContextType | null>(null);
