@@ -1,40 +1,26 @@
 import { httpClient } from '@/services/http';
-import type { Quote, ZenQuotesResponse } from './types';
+import type { Quote } from './types';
 
-const ZEN_QUOTES_API = '/api/random';
+interface QuoteApiResponse {
+    success: boolean;
+    data: Quote;
+    timestamp: number;
+}
 
 class QuoteService {
   /**
-     * Fetch a random quote from Zen Quotes API
+     * Fetch a random quote from local backend API
      */
   async fetchRandomQuote(): Promise<Quote> {
     try {
-      const response = await httpClient.get<ZenQuotesResponse[]>(
-        ZEN_QUOTES_API,
-        {
-          headers: {
-            'Accept': 'application/json',
-          }
-        }
-      );
-      // API returns an array with one item
-      if (!response || response.length === 0) {
-        throw new Error('Empty response from Zen Quotes API');
+      const response = await httpClient.get<QuoteApiResponse>('/api/quote');
+      if (!response || !response.data) {
+        throw new Error('Invalid response from quote API');
       }
-      return this.normalizeQuote(response[0]);
+      return response.data;
     } catch (error) {
       throw new Error(`Failed to fetch quote: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
-  }
-
-  /**
-     * Convert Zen Quotes API response to internal Quote format
-     */
-  private normalizeQuote(response: ZenQuotesResponse): Quote {
-    return {
-      text: response.q,
-      author: response.a,
-    };
   }
 }
 

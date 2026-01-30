@@ -4,21 +4,21 @@ import { resolve } from 'path';
 
 // Web preview config - without crxjs plugin for direct browser access
 export default defineConfig({
-    plugins: [react()],
-    resolve: {
-        alias: {
-            '@': resolve(__dirname, 'src'),
-        },
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
     },
-    server: {
-        host: true,
-        port: 5173,
-        proxy: {
-            '/api': {
-                target: 'https://zenquotes.io',
-                changeOrigin: true,
-                rewrite: (path) => path,
-            },
-        },
+  },
+  server: {
+    host: true,
+    port: 5173,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: (path) => path,
+      },
     },
+  },
 });

@@ -2,9 +2,13 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 class HttpClient {
   private instance: AxiosInstance;
+  private apiBaseUrl: string;
 
   constructor() {
-    // In development, requests to zenquotes.io will be proxied via Vite
+    // Get API base URL from environment variables
+    this.apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+
+    // In development, requests will be proxied via Vite
     // In production (Chrome extension), requests will use full URL with host_permissions
     this.instance = axios.create({
       timeout: 10000,
@@ -61,20 +65,21 @@ class HttpClient {
 
   /**
      * Normalize URL based on execution environment
-     * - In Chrome extension: convert relative /api/* paths to absolute URLs
-     * - In development: keep relative paths for Vite proxy to intercept
+     * - Uses VITE_API_BASE_URL environment variable for API base URL
+     * - In Chrome extension: add full API base URL
+     * - In development: keep relative path for Vite proxy
      */
   private normalizeUrl(url: string): string {
     const isExtension = typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id;
 
-    if (isExtension && url.startsWith('/api/')) {
-      // Chrome extension environment: add domain prefix for CORS and host_permissions
-      return `https://zenquotes.io${url}`;
-    }
-
-    if (!isExtension && url.includes('zenquotes.io')) {
-      // Development environment: strip domain for Vite proxy
-      return url.replace('https://zenquotes.io', '');
+    // Backend API endpoints
+    if (url.startsWith('/quote') || url.startsWith('/weather')) {
+      if (isExtension) {
+        // Chrome extension: add full API base URL from environment
+        return `${this.apiBaseUrl}${url}`;
+      }
+      // Development: keep relative path for Vite proxy
+      return url;
     }
 
     return url;
