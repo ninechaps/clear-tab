@@ -5,5 +5,6 @@ export { WidgetContainer } from './WidgetContainer';
 export { WidgetDrawer } from './WidgetDrawer';
 export { FloatingWidgets } from './FloatingWidgets';
 export { LanguageSwitcher } from './LanguageSwitcher';
+export { DuplicateWidgetNotice } from './DuplicateWidgetNotice';
 export { WidgetHeaderContext, type HeaderAction, type WidgetHeaderContextType } from './WidgetHeaderContext';
 export { useWidgetHeader } from './useWidgetHeader';

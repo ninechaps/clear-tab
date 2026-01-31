@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useSettingsStore } from '@/store/useSettingsStore';
 import { AppRoutes } from '@/routes';
 import { ClockSkeleton, SearchSkeleton } from '@/components/common/Skeleton';
-import { Background } from '@/components/common';
+import { Background, DuplicateWidgetNotice } from '@/components/common';
 
 function App() {
   const { isLoading, loadSettings, language } = useSettingsStore();
@@ -29,7 +29,12 @@ function App() {
     );
   }
 
-  return <AppRoutes />;
+  return (
+    <>
+      <AppRoutes />
+      <DuplicateWidgetNotice />
+    </>
+  );
 }
 
 export default App;

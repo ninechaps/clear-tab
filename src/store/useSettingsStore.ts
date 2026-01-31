@@ -1,23 +1,23 @@
 import { create } from 'zustand';
-import type { UserSettings, ThemeMode, Widget, WidgetType, WallpaperSource, QuickLinkItem } from '@/types';
+import type { QuickLinkItem, ThemeMode, UserSettings, WallpaperSource, Widget, WidgetType } from '@/types';
 import { storageService } from '@/services/storage';
 import { widgetRegistry } from '@/widgets/_registry';
 
 interface SettingsState extends UserSettings {
-  isLoading: boolean
-  setTheme: (theme: ThemeMode) => void
-  setWidgets: (widgets: Widget[]) => void
-  toggleWidget: (widgetId: string) => void
-  updateWidgetPosition: (widgetId: string, position: { x: number; y: number }) => void
-  addWidget: (type: WidgetType) => void
-  removeWidget: (widgetId: string) => void
-  setWallpaperSource: (source: Partial<WallpaperSource>) => void
-  setLanguage: (language: 'en' | 'zh') => void
-  addQuickLink: (link: Omit<QuickLinkItem, 'id'>) => void
-  removeQuickLink: (linkId: string) => void
-  updateQuickLink: (linkId: string, updates: Partial<QuickLinkItem>) => void
-  loadSettings: () => Promise<void>
-  saveSettings: () => Promise<void>
+    isLoading: boolean
+    setTheme: (theme: ThemeMode) => void
+    setWidgets: (widgets: Widget[]) => void
+    toggleWidget: (widgetId: string) => void
+    updateWidgetPosition: (widgetId: string, position: { x: number; y: number }) => void
+    addWidget: (type: WidgetType) => void
+    removeWidget: (widgetId: string) => void
+    setWallpaperSource: (source: Partial<WallpaperSource>) => void
+    setLanguage: (language: 'en' | 'zh') => void
+    addQuickLink: (link: Omit<QuickLinkItem, 'id'>) => void
+    removeQuickLink: (linkId: string) => void
+    updateQuickLink: (linkId: string, updates: Partial<QuickLinkItem>) => void
+    loadSettings: () => Promise<void>
+    saveSettings: () => Promise<void>
 }
 
 function getBrowserLocale(): 'en' | 'zh' {

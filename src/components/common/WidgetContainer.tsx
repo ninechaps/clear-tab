@@ -80,7 +80,7 @@ export function WidgetContainer({
   return (
     <div
       ref={ref}
-      className={`fixed bg-white/8 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden ${
+      className={`fixed bg-white/8 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden w-96 ${
         isDragging ? 'scale-105 shadow-2xl cursor-grabbing opacity-80' : 'cursor-grab transition-all duration-300'
       }`}
       style={{

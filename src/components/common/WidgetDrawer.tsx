@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ExternalLink, X } from 'lucide-react';
 import { useSettingsStore } from '@/store/useSettingsStore';
@@ -8,7 +8,7 @@ import { getWidgetManifest } from '@/widgets/_registry';
 import type { Widget, WidgetType } from '@/types';
 
 interface WidgetDrawerProps {
-  onClose: () => void
+    onClose: () => void
 }
 
 function getNextAvailablePosition(widgets: Widget[]): { x: number; y: number } {
@@ -120,7 +120,7 @@ export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
             {...buttonPresets.close}
             title={t('widgets.close')}
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5"/>
           </Button>
         </div>
 
@@ -130,7 +130,7 @@ export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
           {pinnedWidgets.length > 0 && (
             <div className={`px-6 py-4 ${cssClasses.divider.secondary}`}>
               <h3 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">
-                📌 {t('widgets.pinned')}
+                                📌 {t('widgets.pinned')}
               </h3>
               <div className="space-y-2">
                 {pinnedWidgets.map((widget) => {
@@ -154,7 +154,7 @@ export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
                           className="p-1.5 h-auto text-white/40 hover:text-white/80 hover:bg-white/10"
                           title={t('widgets.openInNewTab')}
                         >
-                          <ExternalLink className="w-4 h-4" />
+                          <ExternalLink className="w-4 h-4"/>
                         </Button>
                         <Button
                           onClick={() => handleUnpin(widget.id)}
@@ -174,7 +174,7 @@ export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
           {availableWidgets.length > 0 && (
             <div className="px-6 py-4">
               <h3 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">
-                📦 {t('widgets.available')}
+                                📦 {t('widgets.available')}
               </h3>
               <div className="space-y-2">
                 {availableWidgets.map((widget) => {
@@ -198,7 +198,7 @@ export function WidgetDrawer({ onClose }: WidgetDrawerProps) {
                           className="p-1.5 h-auto text-white/40 hover:text-white/80 hover:bg-white/10"
                           title={t('widgets.openInNewTab')}
                         >
-                          <ExternalLink className="w-4 h-4" />
+                          <ExternalLink className="w-4 h-4"/>
                         </Button>
                         <Button
                           onClick={() => handlePin(widget.id)}

@@ -19,18 +19,18 @@ import type { WidgetType } from '@/types';
 // ============================================================
 
 export interface WidgetManifest {
-  id: WidgetType
-  name: string
-  description: string
-  enabled: boolean
-  category: string
-  icon: string
-  version: string
-  features: {
-    draggable: boolean
-    closeable: boolean
-    resizable: boolean
-  }
+    id: WidgetType
+    name: string
+    description: string
+    enabled: boolean
+    category: string
+    icon: string
+    version: string
+    features: {
+        draggable: boolean
+        closeable: boolean
+        resizable: boolean
+    }
 }
 
 // ============================================================
@@ -44,29 +44,45 @@ export interface WidgetManifest {
 const manifestModules: Record<string, any> = import.meta.glob('./*/manifest.ts', { eager: true });
 
 /**
+ * 跟踪重复的 widget IDs
+ */
+let duplicateWidgetIds: string[] = [];
+
+/**
  * 从加载的模块中提取 manifest 对象
+ * 直接使用 manifest 中的 id 字段，支持任何包含 id 的命名约定
  */
 const buildManifests = (): WidgetManifest[] => {
   const manifests: WidgetManifest[] = [];
+  const seenIds = new Set<string>();
+  duplicateWidgetIds = [];
 
   for (const [path, module] of Object.entries(manifestModules)) {
-    // 从路径提取 widget id: ./weather/manifest.ts -> weather
-    const match = path.match(/\.\/(\w+)\/manifest\.ts$/);
-    if (match) {
-      const widgetId = match[1];
+    // 查找任何包含 id 字段的导出对象
+    for (const [exportName, exported] of Object.entries(module)) {
+      // 检查是否是有效的 manifest 对象
+      if (
+        exported &&
+        typeof exported === 'object' &&
+        'id' in exported &&
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        typeof (exported as any).id === 'string'
+      ) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const manifest = exported as any as WidgetManifest;
 
-      // 根据命名约定获取导出的 manifest: {widgetId}Manifest
-      const manifestName = `${widgetId}Manifest`;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const manifest = (module as Record<string, any>)[manifestName];
+        // 检测重复 ID
+        if (seenIds.has(manifest.id)) {
+          duplicateWidgetIds.push(manifest.id);
+          console.warn(
+            `⚠️  Duplicate widget ID detected: "${manifest.id}" in ${path} (export: ${exportName}). Skipping this widget.`
+          );
+          continue;
+        }
 
-      if (manifest) {
+        seenIds.add(manifest.id);
         manifests.push(manifest);
-      } else {
-        console.warn(
-          `Widget "${widgetId}": Expected export named "${manifestName}" in ${path}, but not found.` +
-          `\nPlease export your manifest as: export const ${manifestName} = { ... }`
-        );
+        break; // 只取第一个包含 id 的导出
       }
     }
   }
@@ -89,12 +105,23 @@ export const widgetRegistry = manifests.reduce(
     acc[manifest.id] = manifest;
     return acc;
   },
-  {} as Record<string, WidgetManifest>
+    {} as Record<string, WidgetManifest>
 );
 
 // ============================================================
 // 通用的动态加载函数 - 替代 switch 语句
 // ============================================================
+
+/**
+ * 将 kebab-case 转换为 PascalCase
+ * 例如: 'color-converter' -> 'ColorConverter'
+ */
+const kebabToPascalCase = (str: string): string => {
+  return str
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join('');
+};
 
 /**
  * 预加载所有 widget 组件（使用 import.meta.glob）
@@ -108,19 +135,26 @@ const buildComponentMap = (): Record<string, any> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const map: Record<string, any> = {};
 
-  for (const [path, module] of Object.entries(componentModules)) {
-    // 从路径提取 widget id: ./weather/index.tsx -> weather
-    const match = path.match(/\.\/(\w+)\/index\.tsx$/);
-    if (match) {
-      const widgetId = match[1];
+  // 使用已注册的 manifests 来查找对应的组件
+  // 这样可以确保只加载已注册的 widgets 的组件
+  for (const manifest of manifests) {
+    const componentName = kebabToPascalCase(manifest.id);
 
-      // 获取导出的组件
-      const componentName = widgetId.charAt(0).toUpperCase() + widgetId.slice(1);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const component = (module as Record<string, any>)[componentName];
+    // 在 componentModules 中查找对应的组件
+    for (const [path, module] of Object.entries(componentModules)) {
+      // 匹配 ./widget-id/index.tsx 的路径格式
+      if (path.includes(`/${manifest.id}/index.tsx`)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const component = (module as Record<string, any>)[componentName];
 
-      if (component) {
-        map[widgetId] = component;
+        if (component) {
+          map[manifest.id] = component;
+        } else {
+          console.warn(
+            `Widget "${manifest.id}": Expected export named "${componentName}" in ${path}, but not found.`
+          );
+        }
+        break;
       }
     }
   }
@@ -177,5 +211,13 @@ export const getWidgetName = (widgetId: string): string => {
 export const getWidgetDescription = (widgetId: string): string => {
   const manifest = getWidgetManifest(widgetId);
   return manifest?.description || '';
+};
+
+/**
+ * 获取所有重复的 widget IDs
+ * @returns 重复的 widget ID 数组
+ */
+export const getDuplicateWidgetIds = (): string[] => {
+  return duplicateWidgetIds;
 };
 

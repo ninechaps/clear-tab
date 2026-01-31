@@ -379,4 +379,14 @@ body {
   .input-focus {
     @apply focus:bg-black/30 focus:border-white/20;
   }
+
+  /* 隐藏滚动条，但保持滚动功能 */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
 }
