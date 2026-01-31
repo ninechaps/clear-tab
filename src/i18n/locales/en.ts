@@ -57,6 +57,7 @@ export const en = {
     back: '← Back',
     widgets: 'Widgets',
     settings: 'Settings',
+    feedback: 'Feedback',
     error: 'Error',
   },
   widgets: {

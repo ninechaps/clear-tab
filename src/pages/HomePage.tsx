@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid2x2, Image } from 'lucide-react';
 import { useSettingsStore } from '@/store/useSettingsStore';
-import { Background, BackgroundSelector, WidgetDrawer, FloatingWidgets, LanguageSwitcher } from '@/components/common';
+import { Background, BackgroundSelector, WidgetDrawer, FloatingWidgets, LanguageSwitcher, FeedbackButton } from '@/components/common';
 import { ClockSkeleton, SearchSkeleton } from '@/components/common/Skeleton';
 import { ProductiveLayout } from '@/components/layouts';
 import { Button } from '@/components/ui/button';
@@ -33,6 +33,11 @@ export function HomePage() {
 
       {/* Bottom right button group */}
       <div className="fixed bottom-6 right-6 flex gap-3">
+        {/* Feedback button */}
+        <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
+          <FeedbackButton />
+        </div>
+
         {/* Language switcher */}
         <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
           <LanguageSwitcher />

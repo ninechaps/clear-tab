@@ -57,6 +57,7 @@ export const zh = {
     back: '← 返回',
     widgets: '小部件',
     settings: '设置',
+    feedback: '问题反馈',
     error: '错误',
   },
   widgets: {
