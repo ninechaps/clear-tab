@@ -1,2 +1,2 @@
 export { exchangeService } from './api';
-export type { ExchangeRate, ExchangeRatesResponse } from './types';
+export type { ExchangeRate } from './types';
