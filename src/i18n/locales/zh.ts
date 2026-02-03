@@ -108,6 +108,12 @@ export const zh = {
       description: '空气质量指数',
       loading: '加载空气质量中...',
       noData: '没有可用的空气质量数据',
+      good: '优秀',
+      moderate: '中等',
+      unhealthySensitive: '对敏感人群不健康',
+      unhealthy: '不健康',
+      veryUnhealthy: '非常不健康',
+      hazardous: '危险',
     },
     'color-converter': {
       name: '颜色转换器',

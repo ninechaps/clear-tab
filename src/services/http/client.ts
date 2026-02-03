@@ -73,7 +73,7 @@ class HttpClient {
     const isExtension = typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id;
 
     // Backend API endpoints
-    if (url.startsWith('/quote') || url.startsWith('/weather')) {
+    if (url.startsWith('/quote') || url.startsWith('/weather') || url.startsWith('/api/weather')) {
       if (isExtension) {
         // Chrome extension: add full API base URL from environment
         return `${this.apiBaseUrl}${url}`;
