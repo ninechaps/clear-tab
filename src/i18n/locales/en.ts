@@ -108,6 +108,12 @@ export const en = {
       description: 'Air quality index',
       loading: 'Loading air quality...',
       noData: 'No air quality data available',
+      good: 'Good',
+      moderate: 'Moderate',
+      unhealthySensitive: 'Unhealthy for Sensitive Groups',
+      unhealthy: 'Unhealthy',
+      veryUnhealthy: 'Very Unhealthy',
+      hazardous: 'Hazardous',
     },
     'color-converter': {
       name: 'Color Converter',

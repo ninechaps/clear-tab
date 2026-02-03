@@ -1,21 +1,61 @@
 /**
- * Air quality data structure
+ * Air quality data structure from backend
  */
-export interface AirQualityData {
-  city: string;
+export interface AirQualityApiResponse {
+  latitude: number;
+  longitude: number;
   aqi: number;
-  level: 'Excellent' | 'Good' | 'Moderate' | 'Poor' | 'Very Poor';
-  pm25: number;
-  pm10: number;
-  o3: number;
-  no2: number;
-  so2: number;
-  timestamp: string;
+  aqiDisplay: string;
+  level: string;
+  category: string;
+  updateTime: string;
+  primaryPollutant: {
+    code: string;
+    name: string;
+    fullName: string;
+  };
+  healthEffect: string;
+  healthAdvice: {
+    generalPopulation: string;
+    sensitivePopulation: string;
+  };
+  color: {
+    red: number;
+    green: number;
+    blue: number;
+    alpha: number;
+  };
+  pollutants: Array<{
+    code: string;
+    name: string;
+    fullName: string;
+    concentration: {
+      value: number;
+      unit: string;
+    };
+  }>;
 }
 
 /**
- * Air quality response
+ * Air quality data structure for frontend (enriched with city info)
  */
-export interface AirQualityResponse {
-  data: AirQualityData[];
+export interface AirQualityData {
+  city: string;
+  latitude: number;
+  longitude: number;
+  aqi: number;
+  category: string;
+  updateTime: string;
+  healthEffect: string;
+  healthAdvice: {
+    generalPopulation: string;
+    sensitivePopulation: string;
+  };
+  pollutants: Array<{
+    code: string;
+    name: string;
+    fullName: string;
+    value: number;
+    unit: string;
+  }>;
 }

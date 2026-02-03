@@ -1,19 +1,22 @@
 /**
- * Exchange rate data structure
+ * Exchange rate data structure for frontend
  */
 export interface ExchangeRate {
-  pair: string;
   baseCurrency: string;
   targetCurrency: string;
   rate: number;
-  change: number;
-  changePercent: number;
-  timestamp: string;
 }
 
 /**
- * Exchange rates list response
+ * Exchange rates API response
  */
-export interface ExchangeRatesResponse {
-  rates: ExchangeRate[];
+export interface ExchangeRatesApiResponse {
+  success: boolean;
+  data: {
+    base: string;
+    date: string;
+    rates: Record<string, number>;
+    timestamp: number;
+  };
+  timestamp: number;
 }
