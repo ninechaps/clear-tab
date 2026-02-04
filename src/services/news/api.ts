@@ -1,26 +1,25 @@
 import { httpClient } from '@/services/http';
-import type { NewsArticle, NewsListResponse } from './types';
+import type { NewsArticle, NewsHeadlinesResponse } from './types';
 
 interface NewsApiResponse {
   success: boolean;
-  data: NewsListResponse;
+  data: NewsHeadlinesResponse;
   timestamp: number;
 }
 
 class NewsService {
   /**
-   * Fetch news articles list
+   * Fetch news headlines
    */
-  async fetchNewsList(): Promise<NewsArticle[]> {
+  async fetchHeadlines(): Promise<NewsArticle[]> {
     try {
-      const response = await httpClient.get<NewsApiResponse>('/news');
+      const response = await httpClient.get<NewsApiResponse>('/api/news/headlines');
       if (!response || !response.data || !response.data.articles) {
         return [];
       }
-      // Limit to 5 articles
-      return response.data.articles.slice(0, 5);
+      return response.data.articles;
     } catch (error) {
-      console.warn('Failed to fetch news:', error);
+      console.warn('Failed to fetch news headlines:', error);
       return [];
     }
   }

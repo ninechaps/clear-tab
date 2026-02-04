@@ -2,17 +2,19 @@
  * News article structure from backend API
  */
 export interface NewsArticle {
-  id: string;
   title: string;
   description: string;
-  date: string;
   source: string;
   url: string;
+  publishedAt: string;
+  category: string;
 }
 
 /**
- * News list response from API
+ * News headlines response from API
  */
-export interface NewsListResponse {
+export interface NewsHeadlinesResponse {
   articles: NewsArticle[];
+  totalResults: number;
+  category: string;
 }

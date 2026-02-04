@@ -33,7 +33,7 @@ export function useExchangeRates(): UseExchangeRatesReturn {
   }, []);
 
   const refresh = useCallback(async () => {
-    await fetchRates(false);
+    await fetchRates(true);
   }, [fetchRates]);
 
   useEffect(() => {
