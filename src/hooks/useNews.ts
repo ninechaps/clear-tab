@@ -14,14 +14,14 @@ export function useNews(): UseNewsReturn {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchNews = useCallback(async (showLoading: boolean = true) => {
+  const fetchHeadlines = useCallback(async (showLoading: boolean = true) => {
     try {
       showLoading && setIsLoading(true);
-      const data = await newsService.fetchNewsList();
+      const data = await newsService.fetchHeadlines();
       setArticles(data);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch news');
+      setError(err instanceof Error ? err.message : 'Failed to fetch news headlines');
       setArticles([]);
     } finally {
       showLoading && setIsLoading(false);
@@ -29,13 +29,13 @@ export function useNews(): UseNewsReturn {
   }, []);
 
   const refresh = useCallback(async () => {
-    await fetchNews(false);
-  }, [fetchNews]);
+    await fetchHeadlines(true);
+  }, [fetchHeadlines]);
 
   // Fetch on mount
   useEffect(() => {
-    fetchNews();
-  }, [fetchNews]);
+    fetchHeadlines();
+  }, [fetchHeadlines]);
 
   return {
     articles,

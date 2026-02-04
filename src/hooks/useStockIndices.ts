@@ -29,7 +29,7 @@ export function useStockIndices(): UseStockIndicesReturn {
   }, []);
 
   const refresh = useCallback(async () => {
-    await fetchIndices(false);
+    await fetchIndices(true);
   }, [fetchIndices]);
 
   useEffect(() => {

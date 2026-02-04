@@ -4,10 +4,14 @@
 export interface StockIndex {
   symbol: string;
   name: string;
-  value: number;
+  currentPrice: number;
+  openPrice: number;
+  highPrice: number;
+  lowPrice: number;
+  previousClose: number;
   change: number;
   changePercent: number;
-  timestamp: string;
+  timestamp: number;
 }
 
 /**
@@ -15,4 +19,5 @@ export interface StockIndex {
  */
 export interface StockIndicesResponse {
   indices: StockIndex[];
+  updatedAt: string;
 }
