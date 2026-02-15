@@ -18,8 +18,7 @@ class StockService {
         return [];
       }
       return response.data.indices;
-    } catch (error) {
-      console.warn('Failed to fetch stock indices:', error);
+    } catch {
       return [];
     }
   }
@@ -39,8 +38,7 @@ class StockService {
         return null;
       }
       return response.data.indices[0];
-    } catch (error) {
-      console.warn('Failed to fetch stock quote:', error);
+    } catch {
       return null;
     }
   }

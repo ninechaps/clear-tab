@@ -15,7 +15,7 @@ export default defineConfig({
     },
   },
   define: {
-    'process.env.VITE_API_BASE_URL': JSON.stringify(process.env.VITE_API_BASE_URL || 'http://localhost:3000'),
+    'process.env.VITE_API_BASE_URL': JSON.stringify(process.env.VITE_API_BASE_URL || 'http://api.ninechaps.com'),
   },
   server: {
     host: true,
@@ -32,7 +32,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         newtab: resolve(__dirname, 'index.html'),
-      },
+      }
     },
   },
 });
