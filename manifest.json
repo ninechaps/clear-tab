@@ -7,7 +7,7 @@
     "storage"
   ],
   "host_permissions": [
-    "https://zenquotes.io/*"
+    "http://api.ninechaps.com/*"
   ],
   "chrome_url_overrides": {
     "newtab": "index.html"

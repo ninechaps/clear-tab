@@ -18,8 +18,7 @@ class NewsService {
         return [];
       }
       return response.data.articles;
-    } catch (error) {
-      console.warn('Failed to fetch news headlines:', error);
+    } catch {
       return [];
     }
   }

@@ -7,13 +7,10 @@ class ExchangeService {
    */
   async fetchExchangeRates(): Promise<ExchangeRate[]> {
     try {
-      console.log('Fetching exchange rates from /api/exchange/latest...');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response = await httpClient.get<any>('/api/exchange/latest');
-      console.log('Exchange rates raw response:', response);
 
       if (!response) {
-        console.warn('Empty response from exchange rates API');
         return [];
       }
 
@@ -24,10 +21,7 @@ class ExchangeService {
         apiData = response.data;
       }
 
-      console.log('Processed exchange rates data:', apiData);
-
       if (!apiData || !apiData.rates || typeof apiData.rates !== 'object') {
-        console.warn('No rates object found in response');
         return [];
       }
 
@@ -45,10 +39,8 @@ class ExchangeService {
         }
       }
 
-      console.log('Converted rates array:', rates);
       return rates;
-    } catch (error) {
-      console.error('Failed to fetch exchange rates:', error);
+    } catch {
       return [];
     }
   }
