@@ -28,7 +28,6 @@ export interface ClockSettings {
 }
 
 export interface SearchSettings {
-  engine: 'google' | 'bing' | 'duckduckgo' | 'baidu'
   showSuggestions: boolean
 }
 

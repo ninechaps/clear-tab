@@ -120,7 +120,6 @@ const defaultSettings: UserSettings = {
     style: 'digital',
   },
   searchSettings: {
-    engine: 'google',
     showSuggestions: true,
   },
   weatherSettings: {

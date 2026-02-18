@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "description": "A clean and luminous new tab experience.",
   "permissions": [
-    "storage"
+    "storage",
+    "search"
   ],
   "host_permissions": [
     "http://api.ninechaps.com/*"
