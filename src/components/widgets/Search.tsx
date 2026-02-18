@@ -1,55 +1,12 @@
 import { useState, FormEvent, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Search as SearchIcon } from 'lucide-react';
-import { SiDuckduckgo, SiGoogle } from '@icons-pack/react-simple-icons';
-import { useSettingsStore } from '@/store/useSettingsStore';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-
-// Custom icon components for search engines not in simple-icons
-function BingIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M5 3v16.5l4.25 2.25 8.5-4.25-3.25-1.75 3.25-1.75L5 3zm4 7.5l4 2-4 2v-4z" />
-    </svg>
-  );
-}
-
-function BaiduIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M5 9.5c0-1.93 1.57-3.5 3.5-3.5S12 7.57 12 9.5 10.43 13 8.5 13 5 11.43 5 9.5zm10-3.5c1.93 0 3.5 1.57 3.5 3.5S16.93 13 15 13s-3.5-1.57-3.5-3.5S13.07 6 15 6zm-3 10c0 2.21-1.79 4-4 4s-4-1.79-4-4 1.79-4 4-4 4 1.79 4 4z" />
-    </svg>
-  );
-}
-
-const SEARCH_ENGINES = {
-  google: 'https://www.google.com/search?q=',
-  bing: 'https://www.bing.com/search?q=',
-  duckduckgo: 'https://duckduckgo.com/?q=',
-  baidu: 'https://www.baidu.com/s?wd=',
-};
-
-function getEngineIcon(engine: string): React.ReactNode {
-  const className = 'w-4 h-4';
-  switch (engine) {
-    case 'google':
-      return <SiGoogle className={className} />;
-    case 'bing':
-      return <BingIcon className={className} />;
-    case 'duckduckgo':
-      return <SiDuckduckgo className={className} />;
-    case 'baidu':
-      return <BaiduIcon className={className} />;
-    default:
-      return <SiGoogle className={className} />;
-  }
-}
 
 export function Search() {
   const [query, setQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
-  const { searchSettings } = useSettingsStore();
   const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -65,9 +22,11 @@ export function Search() {
     e.preventDefault();
     if (!query.trim()) return;
 
-    const baseUrl = SEARCH_ENGINES[searchSettings.engine];
-    const searchUrl = baseUrl + encodeURIComponent(query);
-    window.location.href = searchUrl;
+    // 使用 Chrome Search API，尊重用户设置的默认搜索引擎
+    chrome.search.query({
+      text: query,
+      disposition: 'CURRENT_TAB',
+    });
   };
 
   return (
@@ -82,11 +41,11 @@ export function Search() {
 
         {/* Main input container */}
         <div className="relative">
-          {/* Search engine indicator */}
+          {/* Search icon */}
           <div className={`absolute left-5 top-1/2 -translate-y-1/2 transition-all duration-300 ${
             isFocused ? 'text-white/70' : 'text-white/40'
           }`}>
-            {getEngineIcon(searchSettings.engine)}
+            <SearchIcon className="w-4 h-4" />
           </div>
 
           <Input

@@ -16,7 +16,7 @@ The Extension uses Chrome's `storage` API to save your preferences on your devic
 
 - Theme and layout selections
 - Enabled/disabled widget configurations
-- Widget-specific settings (clock format, preferred search engine, etc.)
+- Widget-specific settings (clock format, etc.)
 - Quick link bookmarks
 - Background image preferences
 - Language preference
@@ -55,6 +55,7 @@ The Extension interacts with the following third-party services only when you ac
 ## Permissions
 
 - **storage**: Used to save your preferences locally and sync across Chrome browsers.
+- **search**: Used to submit search queries through Chrome's built-in Search API, which respects the user's default search engine setting. No search queries are collected or transmitted by the Extension.
 - **host_permissions (api.ninechaps.com)**: Required to fetch data for widgets (weather, news, stocks, exchange rates, air quality, quotes).
 
 ## Data Sharing
