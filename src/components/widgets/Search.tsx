@@ -23,10 +23,12 @@ export function Search() {
     if (!query.trim()) return;
 
     // 使用 Chrome Search API，尊重用户设置的默认搜索引擎
-    chrome.search.query({
-      text: query,
-      disposition: 'CURRENT_TAB',
-    });
+    if (typeof chrome !== 'undefined' && chrome.search?.query) {
+      chrome.search.query({ text: query, disposition: 'CURRENT_TAB' });
+    } else {
+      // 开发环境降级：直接跳转 Google（仅用于本地调试，生产环境不会走此分支）
+      window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+    }
   };
 
   return (
